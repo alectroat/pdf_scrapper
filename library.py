@@ -54,7 +54,7 @@ class Main:
 
         # print(ocr_output_details.keys())
 
-        print(ocr_output_details.keys())
+        # print(ocr_output_details.keys())
 
         # Show output image with bounding boxes
         # cv2.imshow('img', img)
@@ -72,7 +72,7 @@ class Main:
             # Get the current page
             page = pdf_document[page_number]
 
-            print("page no :: " + str(page_number))
+            # print("page no :: " + str(page_number))
 
             # Get the page as an image (you can adjust the DPI value)
             image = page.get_pixmap(matrix=fitz.Matrix(300 / 72, 300 / 72))
@@ -86,7 +86,7 @@ class Main:
             img.save(output_file_path)
 
             self.DrawBoundingBox(file_name_page_wise, (page_number + 1))
-            print("Page No : " + str(file_name_page_wise) + str(page_number + 1))
+            # print("Page No : " + str(file_name_page_wise) + str(page_number + 1))
 
             # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
             #

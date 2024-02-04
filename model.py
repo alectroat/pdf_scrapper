@@ -10,29 +10,29 @@ data_storage: list = []
 formatted_data = []
 formatted_clean_data = []
 
-# pdf_path = "Sample documents/New folder/AccurA Diamond Tools Ltd.pdf"
-# mandatory_column = 1
-# ColumnList = [
-#     HeaderList(1, "Qty", [ItemCoordinate(135, 1265, 251, 1326)]),
-#     HeaderList(2, "Code", [ItemCoordinate(280, 1259, 560, 1317)]),
-#     HeaderList(3, "Product Description", [ItemCoordinate(570, 1259, 1307, 1314)]),
-#     HeaderList(4, "Unit Price", [ItemCoordinate(1333, 1265, 1732, 1314)]),
-#     HeaderList(5, "Net Amount", [ItemCoordinate(1742, 1268, 2064, 1314)]),
-#     HeaderList(6, "VAT Amount", [ItemCoordinate(2087, 1259, 2373, 1317)])
-# ]
-
-pdf_path = "Sample documents/New folder/Thomas Archer (Ballina) 2 Page.pdf"
+pdf_path = "Sample documents/New folder/AccurA Diamond Tools Ltd.pdf"
 mandatory_column = 1
 ColumnList = [
-    HeaderList(1, "Item Code", [ItemCoordinate(74, 1198, 354, 1307)]),
-    HeaderList(2, "Description", [ItemCoordinate(376, 1201, 1101, 1310)]),
-    HeaderList(3, "Quantity", [ItemCoordinate(1095, 1198, 1326, 1304)]),
-    HeaderList(4, "UOM", [ItemCoordinate(1320, 1198, 1516, 1304)]),
-    HeaderList(5, "Unit Price", [ItemCoordinate(1516, 1198, 1710, 1304)]),
-    HeaderList(6, "Amount", [ItemCoordinate(1713, 1194, 1955, 1304)]),
-    HeaderList(7, "Dis %", [ItemCoordinate(1955, 1198, 2106, 1310)]),
-    HeaderList(8, "Line Total", [ItemCoordinate(2109, 1198, 2383, 1310)])
+    HeaderList(1, "Qty", [ItemCoordinate(135, 1265, 251, 1326)]),
+    HeaderList(2, "Code", [ItemCoordinate(280, 1259, 560, 1317)]),
+    HeaderList(3, "Product Description", [ItemCoordinate(570, 1259, 1307, 1314)]),
+    HeaderList(4, "Unit Price", [ItemCoordinate(1333, 1265, 1732, 1314)]),
+    HeaderList(5, "Net Amount", [ItemCoordinate(1742, 1268, 2064, 1314)]),
+    HeaderList(6, "VAT Amount", [ItemCoordinate(2087, 1259, 2373, 1317)])
 ]
+
+# pdf_path = "Sample documents/New folder/Thomas Archer (Ballina) 2 Page.pdf"
+# mandatory_column = 1
+# ColumnList = [
+#     HeaderList(1, "Item Code", [ItemCoordinate(74, 1198, 354, 1307)]),
+#     HeaderList(2, "Description", [ItemCoordinate(376, 1201, 1101, 1310)]),
+#     HeaderList(3, "Quantity", [ItemCoordinate(1095, 1198, 1326, 1304)]),
+#     HeaderList(4, "UOM", [ItemCoordinate(1320, 1198, 1516, 1304)]),
+#     HeaderList(5, "Unit Price", [ItemCoordinate(1516, 1198, 1710, 1304)]),
+#     HeaderList(6, "Amount", [ItemCoordinate(1713, 1194, 1955, 1304)]),
+#     HeaderList(7, "Dis %", [ItemCoordinate(1955, 1198, 2106, 1310)]),
+#     HeaderList(8, "Line Total", [ItemCoordinate(2109, 1198, 2383, 1310)])
+# ]
 
 classObject = Main("abc.pdf")
 HelperObject = Helper()
@@ -45,7 +45,7 @@ EndOfTableCoordinate = ItemCoordinate(0, 0, 0, 0)
 HeaderCoordinateList = []
 
 
-def ReadTableData():
+def read_table_data():
     data_storage.clear()
     adjustment_height = 45
     # adjustment_height = 0
@@ -53,9 +53,9 @@ def ReadTableData():
     # for obj in pdf_raw_data:
     #     classObject.PrintData(obj)
 
-    coord: ItemCoordinate = HelperObject.findTableHeaderArea(ColumnList)
+    coord: ItemCoordinate = HelperObject.table_header_area(ColumnList)
     TableHeaderCoordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)
-    HeaderCoordinateList: [] = HelperObject.findRepeatingHeaders(pdf_raw_data, TableHeaderCoordinate)
+    HeaderCoordinateList: [] = HelperObject.repeating_table_headers(pdf_raw_data, TableHeaderCoordinate)
 
     table_header_width = TableHeaderCoordinate.x2 - TableHeaderCoordinate.x1
     table_header_height = TableHeaderCoordinate.y2 - TableHeaderCoordinate.y1 - adjustment_height
@@ -197,15 +197,13 @@ def prepare_formatted_clean_data():
 
 
 def end_of_table_y1(page_no=1):
-    coordinate = HelperObject.findMandatoryColumnCoordinate(ColumnList, mandatory_column)
+    coordinate = HelperObject.mandatory_column_coordinate(ColumnList, mandatory_column)
     MandatoryColumnCoordinate = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
-    end_of_page = HelperObject.findBottomOfPage(pdf_raw_data, page_no, MandatoryColumnCoordinate)
-
-    TableFooterCoordinate.y1 = end_of_page
+    end_of_page = HelperObject.end_of_page(pdf_raw_data, page_no, MandatoryColumnCoordinate)
     return HelperObject.end_of_table_coord(page_no, pdf_raw_data, end_of_page,
                                                  MandatoryColumnCoordinate,
                                                  EndOfTableCoordinate)
     pass
 
 
-ReadTableData()
+read_table_data()

@@ -7,7 +7,7 @@ class Helper:
         pass
 
     def end_of_table_coord(self, page_no, pdf_raw_data, end_of_page, MandatoryColumnCoordinate,
-                                 EndOfTableCoordinate):
+                           EndOfTableCoordinate):
         row_gap_allowed = 150
         empty_string = ""
         end_of_table_1 = 0
@@ -50,7 +50,7 @@ class Helper:
         return end_of_table
         pass
 
-    def findBottomOfPage(self, pdf_raw_data, page_no, MandatoryColumnCoordinate):
+    def end_of_page(self, pdf_raw_data, page_no, MandatoryColumnCoordinate):
         bottom_of_page = Query(pdf_raw_data).where(
             lambda
                 x: x.pageNo == page_no).select(
@@ -58,7 +58,7 @@ class Helper:
                                   descending=1).first_or_none()
         return bottom_of_page
 
-    def findMandatoryColumnCoordinate(self, ColumnList, mandatory_column):
+    def mandatory_column_coordinate(self, ColumnList, mandatory_column):
         MandatoryColumnCoordinate = ItemCoordinate(0, 0, 0, 0)
 
         column_len = len(ColumnList)
@@ -71,7 +71,7 @@ class Helper:
 
         return MandatoryColumnCoordinate
 
-    def findTableHeaderArea(self, ColumnList):
+    def table_header_area(self, ColumnList):
         x1_list = []
         y1_list = []
         x2_list = []
@@ -83,21 +83,19 @@ class Helper:
             y2_list.append(ColumnList[index].coordinateList[0].y2)
             pass
 
-        TableHeaderCoordinate: ItemCoordinate = ItemCoordinate(0, 0, 0, 0)
+        x1 = Query(x1_list).select(lambda x: x).order(lambda x: x,
+                                                      descending=0).first_or_none()
+        y1 = Query(y1_list).select(lambda x: x).order(lambda x: x,
+                                                      descending=0).first_or_none()
+        x2 = Query(x2_list).select(lambda x: x).order(lambda x: x,
+                                                      descending=1).first_or_none()
+        y2 = Query(y2_list).select(lambda x: x).order(lambda x: x,
+                                                      descending=1).first_or_none()
 
-        TableHeaderCoordinate.x1 = Query(x1_list).select(lambda x: x).order(lambda x: x,
-                                                                            descending=0).first_or_none()
-        TableHeaderCoordinate.y1 = Query(y1_list).select(lambda x: x).order(lambda x: x,
-                                                                            descending=0).first_or_none()
-        TableHeaderCoordinate.x2 = Query(x2_list).select(lambda x: x).order(lambda x: x,
-                                                                            descending=1).first_or_none()
-        TableHeaderCoordinate.y2 = Query(y2_list).select(lambda x: x).order(lambda x: x,
-                                                                            descending=1).first_or_none()
-
-        return TableHeaderCoordinate
+        return ItemCoordinate(x1, y1, x2, y2)
         pass
 
-    def findRepeatingHeaders(self, pdf_raw_data, TableHeaderCoordinate: ItemCoordinate):
+    def repeating_table_headers(self, pdf_raw_data, TableHeaderCoordinate: ItemCoordinate):
 
         table_header_items = Query(pdf_raw_data).select(lambda x: x).where(
             lambda x: TableHeaderCoordinate.y1 <= x.y1 and x.y2 <= TableHeaderCoordinate.y2 and len(
