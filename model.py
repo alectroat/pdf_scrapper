@@ -2,6 +2,9 @@ from linq import Query
 from TextCoordinate import TextCoordinate, ItemCoordinate, HeaderList, Item, HeaderCollection, TableRegion
 from library import Main
 from helper import Helper
+from convert_table_data_to_json import ConvertTableDataToJson
+import os
+
 
 Item_list: list = []
 table_list: list = []
@@ -271,3 +274,8 @@ def end_of_table_y1(page_no=1):
 
 
 read_table_data()
+filename_without_ext = os.path.splitext(os.path.basename(pdf_path))[0]
+xlsx_filename = filename_without_ext + ".xlsx"
+convert_table_data_to_json = ConvertTableDataToJson([header.text for header in ColumnList],
+                                                    formatted_clean_data)
+convert_table_data_to_json.to_excel(os.path.basename(xlsx_filename))
