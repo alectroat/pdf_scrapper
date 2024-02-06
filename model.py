@@ -5,7 +5,6 @@ from helper import Helper
 from convert_table_data_to_json import ConvertTableDataToJson
 import os
 
-
 Item_list: list = []
 table_list: list = []
 item = None
@@ -97,8 +96,8 @@ ColumnList = [
 # ]
 
 classObject = Main("abc.pdf")
-HelperObject = Helper()
 pdf_raw_data: [] = classObject.ExtractDataFromPdf(pdf_path)
+HelperObject = Helper(pdf_raw_data)
 
 TableHeaderCoordinate = ItemCoordinate(0, 0, 0, 0)
 TableFooterCoordinate = ItemCoordinate(0, 0, 0, 0)
@@ -106,16 +105,20 @@ EndOfTableCoordinate = ItemCoordinate(0, 0, 0, 0)
 HeaderCoordinateList = []
 
 
+def print_pdf_raw_data():
+    for obj in pdf_raw_data:
+        classObject.PrintData(obj)
+
+
 def read_table_data():
     data_storage.clear()
     adjustment_height = 45
 
-    # for obj in pdf_raw_data:
-    #     classObject.PrintData(obj)
+    # print_pdf_raw_data()
 
     coord: ItemCoordinate = HelperObject.table_header_area(ColumnList)
     TableHeaderCoordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)
-    HeaderCoordinateList: [] = HelperObject.repeating_table_headers(pdf_raw_data, TableHeaderCoordinate, ColumnList,
+    HeaderCoordinateList: [] = HelperObject.repeating_table_headers(TableHeaderCoordinate, ColumnList,
                                                                     mandatory_column)
 
     table_header_width = TableHeaderCoordinate.x2 - TableHeaderCoordinate.x1
@@ -153,7 +156,6 @@ def read_table_data():
 def collect_table_data(page_no, table_region):
     row: list = []
     row_separator = ""
-    print(page_no, " ", table_region.top.y2)
     row_wise_data_collection = Query(pdf_raw_data).select(lambda x: x).where(
         lambda x: x.pageNo == page_no and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
@@ -265,11 +267,10 @@ def prepare_formatted_clean_data():
 
 def end_of_table_y1(page_no=1):
     coordinate = HelperObject.mandatory_column_coordinate(ColumnList, mandatory_column)
-    MandatoryColumnCoordinate = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
-    end_of_page = HelperObject.end_of_page(pdf_raw_data, page_no, MandatoryColumnCoordinate)
-    return HelperObject.end_of_table_coord(page_no, pdf_raw_data, end_of_page,
-                                           MandatoryColumnCoordinate,
-                                           EndOfTableCoordinate)
+    mandatory_column_coord = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
+    end_of_page = HelperObject.end_of_page(page_no)
+    return HelperObject.end_of_table_coord(page_no, end_of_page,
+                                           mandatory_column_coord)
     pass
 
 

@@ -1,203 +1,243 @@
 from linq import Query
+from operator import attrgetter
 
 from TextCoordinate import ItemCoordinate, HeaderCollection, GapCollection
 
 
 class Helper:
-    def __init__(self):
+    def __init__(self, pdf_raw_data):
         self.word_frequency = 8
         self.empty_string = ""
+        self.first_page = 1
+        self.pdf_raw_data = pdf_raw_data
         pass
 
-    def end_of_table_coord(self, page_no, pdf_raw_data, end_of_page, MandatoryColumnCoordinate,
-                           EndOfTableCoordinate):
+    def end_of_table_when_text_under_table(self, page_no, end_of_page, mandatory_column_coord):
+        dada_inside_certain_height = (
+            Query(self.pdf_raw_data)
+            .where(
+                lambda x: (
+                        x.pageNo == page_no
+                        and mandatory_column_coord.y2 < x.y1 < end_of_page
+                        and x.text != self.empty_string
+                )
+            )
+            .select(lambda x: x)
+            .to_list()
+        )
+
+        end_of_table_1 = next(
+            (item.y1 for item in dada_inside_certain_height if item.x1 < mandatory_column_coord.x2 < item.x2),
+            0,
+        )
+
+        return end_of_table_1
+
+    def end_of_table_when_blank_under_table(self, page_no, end_of_page, mandatory_column_coord):
         row_gap_allowed = 45
-        end_of_table_1 = 0
         end_of_table_2 = 0
 
-        dada_inside_certain_height = Query(pdf_raw_data).where(
-            lambda
-                x: x.pageNo == page_no and MandatoryColumnCoordinate.y2 < x.y1 < end_of_page and x.text != self.empty_string).select(
-            lambda x: x).to_list()
+        data_source = (
+            Query(self.pdf_raw_data)
+            .where(
+                lambda x: x.pageNo == page_no
+                and mandatory_column_coord.y2 < x.y1 < end_of_page
+            )
+            .select(lambda x: x)
+            .to_list()
+        )
 
-        data_source = Query(pdf_raw_data).where(
-            lambda
-                x: x.pageNo == page_no and MandatoryColumnCoordinate.y2 < x.y1 < end_of_page).select(
-            lambda x: x).to_list()
-
-        for index in range(len(dada_inside_certain_height)):
-            if dada_inside_certain_height[index].x1 < MandatoryColumnCoordinate.x2 < dada_inside_certain_height[
-                index].x2:
-                end_of_table_1 = dada_inside_certain_height[index].y1
-                break
-
-        for index in range(len(data_source)):
-            if index == 0 and data_source[index].text == "":
+        for index, item in enumerate(data_source):
+            if index == 0 and item.text == self.empty_string:
                 continue
-            if data_source[index].text == "":
-                row_gap = data_source[index].y1 - data_source[index - 1].y2
+
+            if item.text == self.empty_string:
+                row_gap = item.y1 - data_source[index - 1].y2
+
                 if row_gap > row_gap_allowed:
                     end_of_table_2 = data_source[index - 1].y2
                     break
 
-        end_of_table = min(end_of_table_1, end_of_table_2)
+        return end_of_table_2
 
+    def end_of_table_coord(self, page_no, end_of_page, mandatory_column_coord):
+        end_of_table_1 = self.end_of_table_when_text_under_table(page_no, end_of_page, mandatory_column_coord)
+        end_of_table_2 = self.end_of_table_when_blank_under_table(page_no, end_of_page, mandatory_column_coord)
+        end_of_table = min(end_of_table_1, end_of_table_2)
         if end_of_table == 0:
             end_of_table = end_of_page
-
         return end_of_table
         pass
 
-    def end_of_page(self, pdf_raw_data, page_no, MandatoryColumnCoordinate):
-        bottom_of_page = Query(pdf_raw_data).where(
+    def end_of_page(self, page_no):
+        bottom_of_page = Query(self.pdf_raw_data).where(
             lambda
                 x: x.pageNo == page_no).select(
             lambda x: x.y2).order(lambda x: x,
                                   descending=1).first_or_none()
         return bottom_of_page
 
-    def mandatory_column_coordinate(self, ColumnList, mandatory_column):
-        MandatoryColumnCoordinate = ItemCoordinate(0, 0, 0, 0)
+    def mandatory_column_coordinate(self, column_list, mandatory_column):
+        mandatory_column_coord = ItemCoordinate(0, 0, 0, 0)
 
-        column_len = len(ColumnList)
+        column_len = len(column_list)
         for column_index in range(column_len + 1):
             if (column_index + 1) == mandatory_column:
-                MandatoryColumnCoordinate.x1 = ColumnList[column_index].coordinateList[0].x1
-                MandatoryColumnCoordinate.x2 = ColumnList[column_index].coordinateList[0].x2
-                MandatoryColumnCoordinate.y1 = ColumnList[column_index].coordinateList[0].y1
-                MandatoryColumnCoordinate.y2 = ColumnList[column_index].coordinateList[0].y2
+                mandatory_column_coord.x1 = column_list[column_index].coordinateList[0].x1
+                mandatory_column_coord.x2 = column_list[column_index].coordinateList[0].x2
+                mandatory_column_coord.y1 = column_list[column_index].coordinateList[0].y1
+                mandatory_column_coord.y2 = column_list[column_index].coordinateList[0].y2
 
-        return MandatoryColumnCoordinate
+        return mandatory_column_coord
 
     def table_header_area(self, column_list):
-        x1_list = []
-        y1_list = []
-        x2_list = []
-        y2_list = []
-        for index in range(len(column_list)):
-            x1_list.append(column_list[index].coordinateList[0].x1)
-            y1_list.append(column_list[index].coordinateList[0].y1)
-            x2_list.append(column_list[index].coordinateList[0].x2)
-            y2_list.append(column_list[index].coordinateList[0].y2)
-            pass
+        x1_list = [column.coordinateList[0].x1 for column in column_list]
+        y1_list = [column.coordinateList[0].y1 for column in column_list]
+        x2_list = [column.coordinateList[0].x2 for column in column_list]
+        y2_list = [column.coordinateList[0].y2 for column in column_list]
 
-        x1 = Query(x1_list).select(lambda x: x).order(lambda x: x,
-                                                      descending=0).first_or_none()
-        y1 = Query(y1_list).select(lambda x: x).order(lambda x: x,
-                                                      descending=0).first_or_none()
-        x2 = Query(x2_list).select(lambda x: x).order(lambda x: x,
-                                                      descending=1).first_or_none()
-        y2 = Query(y2_list).select(lambda x: x).order(lambda x: x,
-                                                      descending=1).first_or_none()
+        x1 = min(x1_list, default=None)
+        y1 = min(y1_list, default=None)
+        x2 = max(x2_list, default=None)
+        y2 = max(y2_list, default=None)
 
         return ItemCoordinate(x1, y1, x2, y2)
-        pass
 
-    def repeating_table_headers(self, pdf_raw_data, table_header_coord: ItemCoordinate, column_list, mandatory_column):
-        first_page = 1
-        table_header_items = Query(pdf_raw_data).select(lambda x: x).where(
-            lambda x: table_header_coord.y1 <= x.y1 and x.y2 <= table_header_coord.y2 and len(
-                x.text) >= 3 and x.pageNo == first_page).to_list()
+    def repeating_table_headers(self, table_header_coord: ItemCoordinate, column_list, mandatory_column):
+        table_header_items = (
+            Query(self.pdf_raw_data)
+            .select(lambda x: x)
+            .where(
+                lambda x: (
+                        table_header_coord.y1 <= x.y1
+                        and x.y2 <= table_header_coord.y2
+                        and len(x.text) >= 3
+                        and x.pageNo == self.first_page
+                )
+            )
+            .to_list()
+        )
 
-        header_label_list = []
+        header_label_list = [obj.text for obj in table_header_items]
         header_coord_list = []
 
-        for obj in table_header_items:
-            header_label_list.append(obj.text)
+        total_page = (
+            Query(self.pdf_raw_data)
+            .select(lambda x: x.pageNo)
+            .order(lambda x: x, descending=1)
+            .first_or_none()
+        )
 
-        total_page = Query(pdf_raw_data).select(lambda x: x.pageNo).order(lambda x: x,
-                                                                          descending=1).first_or_none()
         for index in range(total_page):
             page_no = index + 1
 
-            page_data_without_space = Query(pdf_raw_data).select(lambda x: x).where(
-                lambda x: x.pageNo == page_no and x.text != self.empty_string).to_list()
-            total_word = len(page_data_without_space)
-            for idx in range(total_word):
-                if idx + 2 <= total_word:
-                    if page_data_without_space[idx].text == header_label_list[0] and page_data_without_space[
-                        idx + 1].text == header_label_list[1] and \
-                            page_data_without_space[idx + 2].text == header_label_list[2]:
-                        header_item = HeaderCollection(page_no)
-                        header_item.coordinate = ItemCoordinate(page_data_without_space[idx].x1,
-                                                                page_data_without_space[idx].y1,
-                                                                page_data_without_space[idx].x2,
-                                                                page_data_without_space[idx].y2)
-                        header_coord_list.append(header_item)
-                        break
-                    pass
-                pass
+            page_data_without_space = (
+                Query(self.pdf_raw_data)
+                .select(lambda x: x)
+                .where(
+                    lambda x: x.pageNo == page_no and x.text != self.empty_string
+                )
+                .to_list()
+            )
 
-            found = Query(header_coord_list).select(lambda x: x).where(
-                lambda x: x.pageNo == page_no).first_or_none()
+            total_word = len(page_data_without_space)
+            for idx in range(total_word - 2):
+                if (
+                        page_data_without_space[idx].text == header_label_list[0]
+                        and page_data_without_space[idx + 1].text == header_label_list[1]
+                        and page_data_without_space[idx + 2].text == header_label_list[2]
+                ):
+                    header_item = HeaderCollection(page_no)
+                    header_item.coordinate = ItemCoordinate(
+                        page_data_without_space[idx].x1,
+                        page_data_without_space[idx].y1,
+                        page_data_without_space[idx].x2,
+                        page_data_without_space[idx].y2,
+                    )
+                    header_coord_list.append(header_item)
+                    break
+
+            found = (
+                Query(header_coord_list)
+                .select(lambda x: x)
+                .where(lambda x: x.pageNo == page_no)
+                .first_or_none()
+            )
 
             if found is None:
                 mandatory_coord = self.mandatory_column_coord(column_list, mandatory_column)
 
-                query_data = pdf_raw_data
-                query_data2 = Query(query_data).select(lambda x: x).where(
-                    lambda x: x.pageNo == page_no and x.x1 > mandatory_coord.x1 and x.x2 < mandatory_coord.x2).order(
-                    lambda x: x.y1,
-                    descending=0).to_list()
+                query_data = (
+                    Query(self.pdf_raw_data)
+                    .select(lambda x: x)
+                    .where(
+                        lambda x: (
+                                x.pageNo == page_no
+                                and x.x1 > mandatory_coord.x1
+                                and x.x2 < mandatory_coord.x2
+                        )
+                    )
+                    .order(lambda x: x.y1, descending=0)
+                    .to_list()
+                )
 
-                y1 = self.data_from_same_height(query_data2, pdf_raw_data, page_no, column_list)
-                if y1 != 0:
+                top_y1 = self.find_top_y1(query_data, page_no, column_list)
+                if top_y1 != 0:
                     header_item = HeaderCollection(page_no)
-                    header_item.coordinate = ItemCoordinate(page_data_without_space[idx].x1,
-                                                            y1,
-                                                            page_data_without_space[idx].x2,
-                                                            y1)
+                    header_item.coordinate = ItemCoordinate(
+                        page_data_without_space[idx].x1,
+                        top_y1,
+                        page_data_without_space[idx].x2,
+                        top_y1,
+                    )
                     header_coord_list.append(header_item)
-                    pass
+
         return header_coord_list
         pass
 
-    def data_from_same_height(self, query_data, pdf_raw_data, page_no, column_list):
-
+    def find_top_y1(self, query_data, page_no, column_list):
         sorted_list = []
 
-        for index in range(len(query_data)):
+        for item in query_data:
+            limit_top_y1 = item.y1 - 2
+            limit_bottom_y1 = item.y1 + 2
 
-            limit_top_y1 = query_data[index].y1 - 2
-            limit_bottom_y1 = query_data[index].y1 + 2
-
-            query_data2 = Query(pdf_raw_data).select(lambda x: x).where(
-                lambda
-                    x: x.pageNo == page_no and limit_top_y1 <= x.y1 <= limit_bottom_y1 and x.text != self.empty_string).order(
-                lambda x: x.y1,
-                descending=0).to_list()
-
-            passed = False
+            query_data2 = (
+                Query(self.pdf_raw_data)
+                .select(lambda x: x)
+                .where(
+                    lambda x: (
+                            x.pageNo == page_no
+                            and limit_top_y1 <= x.y1 <= limit_bottom_y1
+                            and x.text != self.empty_string
+                    )
+                )
+                .order(lambda x: x.y1, descending=0)
+                .to_list()
+            )
 
             if len(query_data2) < self.word_frequency:
                 continue
 
-            for idx in range(len(query_data2)):
-                passed = False
-                for column_index in range(len(column_list)):
-                    x1 = column_list[column_index].coordinateList[0].x1
-                    x2 = column_list[column_index].coordinateList[0].x2
-                    if query_data2[idx].x1 >= x1 and query_data2[idx].x2 <= x2:
-                        passed = True
-                        break
-                    pass
-                if not passed:
-                    break
+            passed = all(
+                any(
+                    column.coordinateList[0].x1 <= item2.x1 <= column.coordinateList[0].x2
+                    for column in column_list
+                )
+                for item2 in query_data2
+            )
 
             if passed:
-                sorted_list.append(query_data[index])
+                sorted_list.append(item)
 
-        top = Query(sorted_list).select(lambda x: x.y1).order(
-            lambda x: x,
-            descending=0).first_or_none()
+        top = (
+            Query(sorted_list)
+            .select(attrgetter("y1"))
+            .order(lambda x: x, descending=0)
+            .first_or_none()
+        )
 
-        if top is None:
-            y1 = 0
-        else:
-            y1 = top - 10
-        print(" y1 ", y1)
-        return y1
-        pass
+        return top - 10 if top is not None else 0
 
     def mandatory_column_coord(self, column_list, mandatory_column):
         for index in range(len(column_list)):
@@ -211,28 +251,19 @@ class Helper:
         pass
 
     def find_gaps(self, column_list):
-        column_len = len(column_list)
         gap_list = []
-        print("")
-        for index in range(column_len):
-            if index == 0:
-                pass
-            else:
-                x1 = column_list[index - 1].coordinateList[0].x2
-                x2 = column_list[index].coordinateList[0].x1
 
-                if x2 - x1 >= 10:
-                    pass
-                else:
-                    x2 += 5
-                    x1 -= 5
-                    pass
+        for index in range(1, len(column_list)):
+            x1 = column_list[index - 1].coordinateList[0].x2
+            x2 = column_list[index].coordinateList[0].x1
 
-                gap_list.append(ItemCoordinate(x1, 0, x2, 0))
-                # print(" x1 : ", x1, " x2 : ", x2)
-                pass
+            if x2 - x1 < 10:
+                x2 += 5
+                x1 -= 5
+
+            gap_list.append(ItemCoordinate(x1, 0, x2, 0))
+
         return gap_list
-        pass
 
     def print_separator(self, separator=""):
         print("")
