@@ -34,19 +34,19 @@ formatted_clean_data = []
 #     HeaderList(6, "VAT", [ItemCoordinate(2177, 1249, 2360, 1339)])
 # ]
 
-pdf_path = "Sample documents/New folder/M. KELLIHER 1998 Ltd. 3 Page.pdf"
-mandatory_column = 1
-ColumnList = [
-    HeaderList(1, "Item Number", [ItemCoordinate(109, 1554, 467, 1620)]),
-    HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
-    HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
-    HeaderList(4, "Qty", [ItemCoordinate(1295, 1567, 1395, 1617)]),
-    HeaderList(5, "Net selling price", [ItemCoordinate(1398, 1464, 1597, 1617)]),
-    HeaderList(6, "Unit", [ItemCoordinate(1607, 1534, 1769, 1617)]),
-    HeaderList(6, "VAT", [ItemCoordinate(1783, 1551, 1938, 1614)]),
-    HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
-    HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
-]
+# pdf_path = "Sample documents/New folder/M. KELLIHER 1998 Ltd. 3 Page.pdf"
+# mandatory_column = 1
+# ColumnList = [
+#     HeaderList(1, "Item Number", [ItemCoordinate(109, 1554, 467, 1620)]),
+#     HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
+#     HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
+#     HeaderList(4, "Qty", [ItemCoordinate(1295, 1567, 1395, 1617)]),
+#     HeaderList(5, "Net selling price", [ItemCoordinate(1398, 1464, 1597, 1617)]),
+#     HeaderList(6, "Unit", [ItemCoordinate(1607, 1534, 1769, 1617)]),
+#     HeaderList(6, "VAT", [ItemCoordinate(1783, 1551, 1938, 1614)]),
+#     HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
+#     HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
+# ]
 
 # pdf_path = "Sample documents/New folder/AccurA Diamond Tools Ltd.pdf"
 # mandatory_column = 1
@@ -95,6 +95,19 @@ ColumnList = [
 #     HeaderList(5, "Total", [ItemCoordinate(2177, 1066, 2367, 1156)])
 # ]
 
+pdf_path = "Sample documents/New folder/Harlow Agencies Limited.pdf"
+mandatory_column = 1
+ColumnList = [
+    HeaderList(1, "Item Code", [ItemCoordinate(63.8, 1061, 505, 1134)]),
+    HeaderList(2, "Description", [ItemCoordinate(505, 1070, 1572, 1121)]),
+    HeaderList(3, "Quantity", [ItemCoordinate(1567, 1061, 1850.2, 1125.61)]),
+    HeaderList(4, "UOM", [ItemCoordinate(1854, 1061, 2150, 1134)]),
+    HeaderList(5, "Unit Price", [ItemCoordinate(2155, 1057, 2460, 1130)]),
+    HeaderList(6, "Amount", [ItemCoordinate(2469, 1061, 2807, 1134)]),
+    HeaderList(7, "Dis %", [ItemCoordinate(2816, 1061, 3030, 1134)]),
+    HeaderList(8, "Line Total", [ItemCoordinate(3044, 1070, 3349.5, 1130)])
+]
+
 classObject = Main("abc.pdf")
 pdf_raw_data: [] = classObject.ExtractDataFromPdf(pdf_path)
 HelperObject = Helper(pdf_raw_data)
@@ -114,7 +127,7 @@ def read_table_data():
     data_storage.clear()
     adjustment_height = 45
 
-    # print_pdf_raw_data()
+    print_pdf_raw_data()
 
     coord: ItemCoordinate = HelperObject.table_header_area(ColumnList)
     TableHeaderCoordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)

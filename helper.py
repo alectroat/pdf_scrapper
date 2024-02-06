@@ -26,44 +26,51 @@ class Helper:
             .to_list()
         )
 
-        end_of_table_1 = next(
+        end_of_table = next(
             (item.y1 for item in dada_inside_certain_height if item.x1 < mandatory_column_coord.x2 < item.x2),
             0,
         )
 
-        return end_of_table_1
+        return end_of_table
 
     def end_of_table_when_blank_under_table(self, page_no, end_of_page, mandatory_column_coord):
-        row_gap_allowed = 45
-        end_of_table_2 = 0
+        row_gap_allowed = 25
+        end_of_table = 0
 
         data_source = (
             Query(self.pdf_raw_data)
             .where(
                 lambda x: x.pageNo == page_no
-                and mandatory_column_coord.y2 < x.y1 < end_of_page
+                          and mandatory_column_coord.y2 < x.y1 < end_of_page
             )
             .select(lambda x: x)
             .to_list()
         )
 
+        length = len(data_source)
+
         for index, item in enumerate(data_source):
             if index == 0 and item.text == self.empty_string:
                 continue
 
-            if item.text == self.empty_string:
-                row_gap = item.y1 - data_source[index - 1].y2
+            if item.text == self.empty_string and (index + 1 <= length):
+                row_gap = data_source[index + 1].y1 - data_source[index - 1].y2
 
                 if row_gap > row_gap_allowed:
-                    end_of_table_2 = data_source[index - 1].y2
+                    print(" My ", data_source[index + 1].text, data_source[index - 1].text)
+                    print(" My ", data_source[index + 1].y1, data_source[index - 1].y2)
+                    end_of_table = data_source[index - 1].y2
                     break
 
-        return end_of_table_2
+        return end_of_table
 
     def end_of_table_coord(self, page_no, end_of_page, mandatory_column_coord):
         end_of_table_1 = self.end_of_table_when_text_under_table(page_no, end_of_page, mandatory_column_coord)
+        print("end 1 ", end_of_table_1)
         end_of_table_2 = self.end_of_table_when_blank_under_table(page_no, end_of_page, mandatory_column_coord)
         end_of_table = min(end_of_table_1, end_of_table_2)
+        print("end 2 ", end_of_table_2)
+        print(" end ", end_of_page)
         if end_of_table == 0:
             end_of_table = end_of_page
         return end_of_table
