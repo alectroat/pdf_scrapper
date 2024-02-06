@@ -34,7 +34,7 @@ class Helper:
         return end_of_table
 
     def end_of_table_when_blank_under_table(self, page_no, end_of_page, mandatory_column_coord):
-        row_gap_allowed = 25
+        row_gap_allowed = 120
         end_of_table = 0
 
         data_source = (
@@ -47,34 +47,26 @@ class Helper:
             .to_list()
         )
 
-        length = len(data_source)
-
         for index, item in enumerate(data_source):
             if index == 0 and item.text == self.empty_string:
                 continue
 
-            if item.text == self.empty_string and (index + 1 <= length):
-                row_gap = data_source[index + 1].y1 - data_source[index - 1].y2
+            if item.text == self.empty_string:
+                row_gap = data_source[index].y1 - data_source[index - 1].y2
 
                 if row_gap > row_gap_allowed:
-                    print(" My ", data_source[index + 1].text, data_source[index - 1].text)
-                    print(" My ", data_source[index + 1].y1, data_source[index - 1].y2)
                     end_of_table = data_source[index - 1].y2
                     break
 
         return end_of_table
 
     def end_of_table_coord(self, page_no, end_of_page, mandatory_column_coord):
-        end_of_table_1 = self.end_of_table_when_text_under_table(page_no, end_of_page, mandatory_column_coord)
-        print("end 1 ", end_of_table_1)
-        end_of_table_2 = self.end_of_table_when_blank_under_table(page_no, end_of_page, mandatory_column_coord)
+        end_of_table_1 = self.end_of_table_when_text_under_table(page_no, end_of_page,
+                                                                 mandatory_column_coord) or end_of_page
+        end_of_table_2 = self.end_of_table_when_blank_under_table(page_no, end_of_page,
+                                                                  mandatory_column_coord) or end_of_page
         end_of_table = min(end_of_table_1, end_of_table_2)
-        print("end 2 ", end_of_table_2)
-        print(" end ", end_of_page)
-        if end_of_table == 0:
-            end_of_table = end_of_page
         return end_of_table
-        pass
 
     def end_of_page(self, page_no):
         bottom_of_page = Query(self.pdf_raw_data).where(
