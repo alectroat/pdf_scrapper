@@ -32,19 +32,19 @@ formatted_clean_data = []
 #     HeaderList(6, "VAT", [ItemCoordinate(2177, 1249, 2360, 1339)])
 # ]
 
-# pdf_path = "Sample documents/New folder/M. KELLIHER 1998 Ltd. 3 Page.pdf"
-# mandatory_column = 1
-# ColumnList = [
-#     HeaderList(1, "Item Number", [ItemCoordinate(109, 1554, 437, 1620)]),
-#     HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
-#     HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
-#     HeaderList(4, "Qty", [ItemCoordinate(1295, 1567, 1395, 1617)]),
-#     HeaderList(5, "Net selling price", [ItemCoordinate(1398, 1464, 1597, 1617)]),
-#     HeaderList(6, "Unit", [ItemCoordinate(1607, 1534, 1769, 1617)]),
-#     HeaderList(6, "VAT", [ItemCoordinate(1783, 1551, 1938, 1614)]),
-#     HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
-#     HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
-# ]
+pdf_path = "Sample documents/New folder/M. KELLIHER 1998 Ltd. 3 Page.pdf"
+mandatory_column = 1
+ColumnList = [
+    HeaderList(1, "Item Number", [ItemCoordinate(109, 1554, 467, 1620)]),
+    HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
+    HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
+    HeaderList(4, "Qty", [ItemCoordinate(1295, 1567, 1395, 1617)]),
+    HeaderList(5, "Net selling price", [ItemCoordinate(1398, 1464, 1597, 1617)]),
+    HeaderList(6, "Unit", [ItemCoordinate(1607, 1534, 1769, 1617)]),
+    HeaderList(6, "VAT", [ItemCoordinate(1783, 1551, 1938, 1614)]),
+    HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
+    HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
+]
 
 # pdf_path = "Sample documents/New folder/AccurA Diamond Tools Ltd.pdf"
 # mandatory_column = 1
@@ -57,18 +57,18 @@ formatted_clean_data = []
 #     HeaderList(6, "VAT Amount", [ItemCoordinate(2087, 1259, 2373, 1317)])
 # ]
 
-pdf_path = "Sample documents/New folder/Thomas Archer (Ballina) 2 Page.pdf"
-mandatory_column = 1
-ColumnList = [
-    HeaderList(1, "Item Code", [ItemCoordinate(74, 1198, 354, 1307)]),
-    HeaderList(2, "Description", [ItemCoordinate(376, 1201, 1101, 1310)]),
-    HeaderList(3, "Quantity", [ItemCoordinate(1095, 1198, 1326, 1304)]),
-    HeaderList(4, "UOM", [ItemCoordinate(1320, 1198, 1516, 1304)]),
-    HeaderList(5, "Unit Price", [ItemCoordinate(1516, 1198, 1710, 1304)]),
-    HeaderList(6, "Amount", [ItemCoordinate(1713, 1194, 1955, 1304)]),
-    HeaderList(7, "Dis %", [ItemCoordinate(1955, 1198, 2106, 1310)]),
-    HeaderList(8, "Line Total", [ItemCoordinate(2109, 1198, 2383, 1310)])
-]
+# pdf_path = "Sample documents/New folder/Thomas Archer (Ballina) 2 Page.pdf"
+# mandatory_column = 1
+# ColumnList = [
+#     HeaderList(1, "Item Code", [ItemCoordinate(74, 1198, 354, 1307)]),
+#     HeaderList(2, "Description", [ItemCoordinate(376, 1201, 1101, 1310)]),
+#     HeaderList(3, "Quantity", [ItemCoordinate(1095, 1198, 1326, 1304)]),
+#     HeaderList(4, "UOM", [ItemCoordinate(1320, 1198, 1516, 1304)]),
+#     HeaderList(5, "Unit Price", [ItemCoordinate(1516, 1198, 1710, 1304)]),
+#     HeaderList(6, "Amount", [ItemCoordinate(1713, 1194, 1955, 1304)]),
+#     HeaderList(7, "Dis %", [ItemCoordinate(1955, 1198, 2106, 1310)]),
+#     HeaderList(8, "Line Total", [ItemCoordinate(2109, 1198, 2383, 1310)])
+# ]
 
 # pdf_path = "Sample documents/New folder/Chadwicks 2 Page.pdf"
 # mandatory_column = 1
@@ -97,7 +97,6 @@ classObject = Main("abc.pdf")
 HelperObject = Helper()
 pdf_raw_data: [] = classObject.ExtractDataFromPdf(pdf_path)
 
-MandatoryColumnCoordinate = ItemCoordinate(0, 0, 0, 0)
 TableHeaderCoordinate = ItemCoordinate(0, 0, 0, 0)
 TableFooterCoordinate = ItemCoordinate(0, 0, 0, 0)
 EndOfTableCoordinate = ItemCoordinate(0, 0, 0, 0)
@@ -107,21 +106,27 @@ HeaderCoordinateList = []
 def read_table_data():
     data_storage.clear()
     adjustment_height = 45
-    # adjustment_height = 0
 
     # for obj in pdf_raw_data:
     #     classObject.PrintData(obj)
 
     coord: ItemCoordinate = HelperObject.table_header_area(ColumnList)
     TableHeaderCoordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)
-    HeaderCoordinateList: [] = HelperObject.repeating_table_headers(pdf_raw_data, TableHeaderCoordinate)
+    HeaderCoordinateList: [] = HelperObject.repeating_table_headers(pdf_raw_data, TableHeaderCoordinate, ColumnList,
+                                                                    mandatory_column)
 
     table_header_width = TableHeaderCoordinate.x2 - TableHeaderCoordinate.x1
     table_header_height = TableHeaderCoordinate.y2 - TableHeaderCoordinate.y1 - adjustment_height
 
     for index in range(len(HeaderCoordinateList)):
         HeaderCoordinateList[index].coordinate.x2 = HeaderCoordinateList[index].coordinate.x1 + table_header_width
-        HeaderCoordinateList[index].coordinate.y2 = HeaderCoordinateList[index].coordinate.y1 + table_header_height
+        if index == 0:
+            HeaderCoordinateList[index].coordinate.y2 = HeaderCoordinateList[index].coordinate.y1 + table_header_height
+            pass
+        else:
+            HeaderCoordinateList[index].coordinate.y2 = HeaderCoordinateList[index].coordinate.y1
+            pass
+
         EndOfTableCoordinate.y1 = end_of_table_y1(HeaderCoordinateList[index].pageNo)
         table_region: TableRegion = TableRegion(ItemCoordinate(HeaderCoordinateList[index].coordinate.x1,
                                                                HeaderCoordinateList[index].coordinate.y1,
@@ -132,7 +137,7 @@ def read_table_data():
                                                                EndOfTableCoordinate.x2,
                                                                EndOfTableCoordinate.y2)
                                                 )
-        collect_table_data_from_page(HeaderCoordinateList[index].pageNo, table_region)
+        collect_table_data(HeaderCoordinateList[index].pageNo, table_region)
 
     store_in_data_structure()
     make_data_readable()
@@ -142,10 +147,10 @@ def read_table_data():
     pass
 
 
-def collect_table_data_from_page(page_no, table_region):
+def collect_table_data(page_no, table_region):
     row: list = []
     row_separator = ""
-
+    print(page_no, " ", table_region.top.y2)
     row_wise_data_collection = Query(pdf_raw_data).select(lambda x: x).where(
         lambda x: x.pageNo == page_no and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
@@ -260,8 +265,8 @@ def end_of_table_y1(page_no=1):
     MandatoryColumnCoordinate = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
     end_of_page = HelperObject.end_of_page(pdf_raw_data, page_no, MandatoryColumnCoordinate)
     return HelperObject.end_of_table_coord(page_no, pdf_raw_data, end_of_page,
-                                                 MandatoryColumnCoordinate,
-                                                 EndOfTableCoordinate)
+                                           MandatoryColumnCoordinate,
+                                           EndOfTableCoordinate)
     pass
 
 

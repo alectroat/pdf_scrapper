@@ -46,3 +46,9 @@ class TableRegion:
     def __init__(self, top, bottom):
         self.top = top
         self.bottom = bottom
+
+
+class GapCollection:
+    def __init__(self, x, margin_left):
+        self.x = x
+        self.margin_left = margin_left

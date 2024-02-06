@@ -1,0 +1,7 @@
+TableFooterCoordinate = ItemCoordinate(129,   1487,  360,   1551)
+ColumnList = [
+    HeaderList(1, "DESCRIPTION", [ItemCoordinate(22.53246753246754, 897.4675324675325, 1692.2727272727273, 1039.8701298701299)]),
+    HeaderList(2, "RATE", [ItemCoordinate(1850, 952, 1940, 980)]),
+    HeaderList(3, "QTY", [ItemCoordinate(2059, 952, 2134, 983)]),
+    HeaderList(4, "AMOUNT", [ItemCoordinate(2257, 952, 2424, 981)])
+]
