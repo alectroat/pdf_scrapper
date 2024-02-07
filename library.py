@@ -99,11 +99,3 @@ class Main:
         # Close the PDF document
         pdf_document.close()
         return self.list
-
-    def PrintData(self, obj: TextCoordinate):
-        print(f'{obj.text: <41}', f'{obj.pageNo: <5}',
-              f'{obj.lineNo: <5}'
-              , f'{obj.x1: <5}', f'{obj.y1: <5}', f'{obj.x2: <5}', f'{obj.y2: <5}')
-
-    def StoreTableData(self):
-        pass

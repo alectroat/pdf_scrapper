@@ -36,16 +36,10 @@ HelperObject = Helper(pdf_raw_data)
 table_end_coordinate = ItemCoordinate(0, 0, 0, 0)
 
 
-def print_pdf_raw_data():
-    for obj in pdf_raw_data:
-        classObject.PrintData(obj)
-
 
 def read_table_data():
     data_storage.clear()
     adjustment_height = 45
-
-    # print_pdf_raw_data()
 
     coord: ItemCoordinate = HelperObject.table_header_area(column_list)
     table_header_coordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)

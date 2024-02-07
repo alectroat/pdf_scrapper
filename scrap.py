@@ -2,7 +2,7 @@ import os
 
 from linq import Query
 
-from TextCoordinate import ItemCoordinate, Item, TableRegion
+from TextCoordinate import ItemCoordinate, Item, TableRegion,TextCoordinate
 from convert_table_data_to_json import ConvertTableDataToJson
 from helper import Helper
 from library import Main
@@ -31,12 +31,13 @@ class Scrapper:
         self.formatted_clean_data = []
 
     def print_pdf_path(self):
-        print("\n***********************************\n\n")
+        print("")
+        print("***********************************")
         print(self.pdf_path)
 
     def print_pdf_raw_data(self):
         for obj in self.pdf_raw_data:
-            Scrapper.library_object.PrintData(obj)
+            self.helper.print_data(obj)
 
     def read_table_data(self):
         self.data_storage.clear()

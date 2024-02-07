@@ -1,7 +1,7 @@
 from linq import Query
 from operator import attrgetter
 
-from TextCoordinate import ItemCoordinate, HeaderCollection, GapCollection
+from TextCoordinate import ItemCoordinate, HeaderCollection, TextCoordinate
 
 
 class Helper:
@@ -264,9 +264,7 @@ class Helper:
 
         return gap_list
 
-    def print_separator(self, separator=""):
-        print("")
-        print(separator)
+    def print_separator(self):
         print("***********************************")
         print("")
 
@@ -275,3 +273,8 @@ class Helper:
             if row.column == 1:
                 print("")
             print(row.text)
+
+    def print_data(self, obj: TextCoordinate):
+        print(f'{obj.text: <41}', f'{obj.pageNo: <5}',
+              f'{obj.lineNo: <5}'
+              , f'{obj.x1: <5}', f'{obj.y1: <5}', f'{obj.x2: <5}', f'{obj.y2: <5}')
