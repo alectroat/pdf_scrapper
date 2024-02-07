@@ -34,7 +34,7 @@ class Helper:
         return end_of_table
 
     def end_of_table_when_blank_under_table(self, page_no, end_of_page, mandatory_column_coord):
-        row_gap_allowed = 68
+        row_gap_allowed = 45
         end_of_table = 0
 
         data_source = (

@@ -208,7 +208,7 @@ def end_of_table_y1(page_no=1):
 
 scrapper = Scrapper(10)
 scrapper.read_table_data()
-
+scrapper.save_into_excel()
 # read_table_data()
 # filename_without_ext = os.path.splitext(os.path.basename(pdf_path))[0]
 # xlsx_filename = filename_without_ext + ".xlsx"

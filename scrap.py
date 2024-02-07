@@ -189,3 +189,11 @@ class Scrapper:
         return self.helper.end_of_table_coord(page_no, end_of_page,
                                               mandatory_column_coord)
         pass
+
+    def save_into_excel(self):
+        filename_without_ext = os.path.splitext(os.path.basename(self.pdf_path))[0]
+        xlsx_filename = filename_without_ext + ".xlsx"
+        convert_table_data_to_json = ConvertTableDataToJson([header.text for header in self.column_list],
+                                                            self.formatted_clean_data)
+        convert_table_data_to_json.to_excel(os.path.basename(xlsx_filename))
+        pass
