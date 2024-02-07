@@ -146,6 +146,120 @@ class PdfCollection:
                     HeaderList(5, "Amount EUR", [ItemCoordinate(2087.90, 1195.39, 2381.11, 1275.94)])
                 ]
             ),
+            PdfProperties(
+                11,
+                "Sample documents/New folder/Heat Merchants Ltd.pdf",
+                1,
+                [
+                    HeaderList(1, "PRODUCT", [ItemCoordinate(45.09, 1075.74, 338.18, 1153.03)]),
+                    HeaderList(2, "DESCRIPTION", [ItemCoordinate(338.18, 1078.96, 1317.29, 1156.25)]),
+                    HeaderList(3, "QUANTITY", [ItemCoordinate(1320.51, 1075.74, 1655.48, 1153.03)]),
+                    HeaderList(4, "PRICE", [ItemCoordinate(1658.70, 1072.51, 1987.22, 1149.81)]),
+                    HeaderList(5, "VAT RATE", [ItemCoordinate(1987.22, 1078.96, 2090.28, 1153.03)]),
+                    HeaderList(6, "VALUE", [ItemCoordinate(2099.94, 1078.96, 2370.49, 1146.59)]),
+                ]
+            ),
+            PdfProperties(
+                12,
+                "Sample documents/New folder/Smiths Building Supplies.pdf",
+                1,
+                [
+                    HeaderList(1, "PRODUCT", [ItemCoordinate(45.09, 1075.74, 338.18, 1153.03)]),
+                    HeaderList(2, "DESCRIPTION", [ItemCoordinate(338.18, 1078.96, 1317.29, 1156.25)]),
+                    HeaderList(3, "QUANTITY", [ItemCoordinate(1320.51, 1075.74, 1655.48, 1153.03)]),
+                    HeaderList(4, "PRICE", [ItemCoordinate(1658.70, 1072.51, 1987.22, 1149.81)]),
+                    HeaderList(5, "VAT RATE", [ItemCoordinate(1987.22, 1078.96, 2090.28, 1153.03)]),
+                    HeaderList(6, "VALUE", [ItemCoordinate(2099.94, 1078.96, 2370.49, 1146.59)]),
+                ]
+            ),
+            PdfProperties(
+                13,
+                "Sample documents/New folder/Premier Window board Ltd_.pdf",
+                1,
+                [
+                    HeaderList(1, "Code", [ItemCoordinate(61.19, 785.87, 244.77, 843.84)]),
+                    HeaderList(2, "Product Description", [ItemCoordinate(248, 782.64, 1391.37, 840.62)]),
+                    HeaderList(3, "Quantity", [ItemCoordinate(1394.59, 785.87, 1623.27, 847.06)]),
+                    HeaderList(4, "Price", [ItemCoordinate(1623.27, 779.42, 1861.61, 840.62)]),
+                    HeaderList(5, "VAT Rate", [ItemCoordinate(1855.22, 776.20, 2096.72, 840.62)]),
+                    HeaderList(6, "Net Amount", [ItemCoordinate(2096.72, 782.64, 2383.37, 847.06)]),
+                ]
+            ),
+            PdfProperties(
+                14,
+                "Sample documents/New folder/SUB-CWI - Laois Attic & Wall Insulation Ltd_.pdf",
+                1,
+                [
+                    HeaderList(1, "Code", [ItemCoordinate(106.28, 988.77, 447.68, 1075.74)]),
+                    HeaderList(2, "Description", [ItemCoordinate(454.12, 992, 885.71, 1072.51)]),
+                    HeaderList(3, "Quantity", [ItemCoordinate(888.93, 992, 1114.38, 1075.74)]),
+                    HeaderList(4, "VAT Rate", [ItemCoordinate(1124.05, 992, 1339.84, 1069.29)]),
+                    HeaderList(5, "Price", [ItemCoordinate(1343.06, 992, 1571.72, 1069.29)]),
+                    HeaderList(6, "Discounted Price", [ItemCoordinate(1578.72, 992, 2054.85, 1069.29)]),
+                    HeaderList(7, "Total", [ItemCoordinate(2141.72, 992, 2364.37, 1069.29)]),
+                ]
+            ),
+            PdfProperties(
+                15,
+                "Sample documents/New folder/SUB-EWI - Ionut Sebastian Leoreanu.pdf",
+                1,
+                [
+                    HeaderList(1, "QTY", [ItemCoordinate(199.68, 1188.46, 386.49, 1307.63)]),
+                    HeaderList(2, "Description", [ItemCoordinate(405.81, 1198.12, 1410.70, 1307.63)]),
+                    HeaderList(3, "UNIT PRICE", [ItemCoordinate(1420.36, 1198.12, 1903.38, 1301.19)]),
+                    HeaderList(4, "AMOUNT", [ItemCoordinate(1916.36, 1198.12, 2302.84, 1301.19)]),
+                ]
+            ),
+            PdfProperties(
+                16,
+                "Sample documents/New folder/SUB-EWI - Marcel Vircolici.pdf",
+                1,
+                [
+                    HeaderList(1, "DESCRIPTION", [ItemCoordinate(115.90, 1457.14, 1533.31, 1589.61)]),
+                    HeaderList(2, "RATE", [ItemCoordinate(1539.93, 1457.14, 2000.25, 1589.63)]),
+                    HeaderList(3, "QTY", [ItemCoordinate(2010.19, 1460.45, 2189.02, 1596.23)]),
+                    HeaderList(4, "AMOUNT", [ItemCoordinate(2192.33, 1453.83, 2437.10, 1589.61)]),
+                ]
+            ),
+            PdfProperties(
+                17,
+                "Sample documents/New folder/SUB-H&P - Kevin O'Brien Heating & Plumbing Ltd_.pdf",
+                4,
+                [
+                    HeaderList(1, "DESCRIPTION", [ItemCoordinate(96.66, 1727.49, 1269.49, 1781.80)]),
+                    HeaderList(2, "QTY", [ItemCoordinate(1269.49, 1727.03, 1594.92, 1785.03)]),
+                    HeaderList(3, "UNIT PRICE", [ItemCoordinate(1601.37, 1733.45, 1994.46, 1785.03)]),
+                    HeaderList(4, "TOTAL", [ItemCoordinate(1994.46, 1727.03, 2394.10, 1788.25)]),
+                ]
+            ),
+            PdfProperties(
+                18,
+                "Sample documents/New folder/SUB-H&P - Teeling Contracting Ltd_.pdf",
+                1,
+                [
+                    HeaderList(1, "Qty", [ItemCoordinate(241.46, 1429.44, 347.70, 1500.27)]),
+                    HeaderList(2, "Details", [ItemCoordinate(350.92, 1435.88, 1616.17, 1500.27)]),
+                    HeaderList(3, "Unit Price", [ItemCoordinate(1619.39, 1429.45, 1802.90, 1497.03)]),
+                    HeaderList(4, "Net", [ItemCoordinate(1802.90, 1432.66, 1947.78, 1500.27)]),
+                    HeaderList(4, "Tax %", [ItemCoordinate(1947.78, 1432.66, 2095.88, 1497.05)]),
+                    HeaderList(4, "Total", [ItemCoordinate(2095.88, 1429.44, 2260.10, 1497.25)]),
+                ]
+            ),
+            PdfProperties(
+                19,
+                "Sample documents/New folder/Valentine Ladders.pdf",
+                1,
+                [
+                    HeaderList(1, "Code", [ItemCoordinate(112.72, 1249.66, 354.28, 1343.06)]),
+                    HeaderList(2, "Description", [ItemCoordinate(360.72, 1243.22, 1217.45, 1330.18)]),
+                    HeaderList(3, "Qty", [ItemCoordinate(1223.89, 1246.45, 1384.90, 1333.40)]),
+                    HeaderList(4, "Unit Price", [ItemCoordinate(1384.93, 1243.22, 1678.02, 1336.62)]),
+                    HeaderList(4, "Disc", [ItemCoordinate(1681.24, 1243.22, 1813.29, 1336.62)]),
+                    HeaderList(4, "Net Amt", [ItemCoordinate(1832.62, 1240.44, 2038.75, 1333.40)]),
+                    HeaderList(4, "VAT %", [ItemCoordinate(2038.75, 1243.22, 2209.45, 1333.40)]),
+                    HeaderList(4, "VAT", [ItemCoordinate(2212.67, 1249.66, 2360.83, 1339.84)]),
+                ]
+            ),
         ]
         pass
 

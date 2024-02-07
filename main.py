@@ -12,4 +12,4 @@ class Main:
         scrapper.save_into_excel()
 
 
-Main().scrap_pdf(7)
+Main().scrap_pdf(19)
