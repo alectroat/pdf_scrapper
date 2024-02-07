@@ -11,6 +11,7 @@ from PdfCollection import PdfCollection
 
 class Scrapper:
     library_object = Main()
+    extracted: bool = True
     empty_string = ""
 
     def __init__(self, pdf_serial_no_):
@@ -28,6 +29,10 @@ class Scrapper:
         self.data_storage: list = []
         self.formatted_data = []
         self.formatted_clean_data = []
+
+    def print_pdf_path(self):
+        print("\n***********************************\n\n")
+        print(self.pdf_path)
 
     def print_pdf_raw_data(self):
         for obj in self.pdf_raw_data:
@@ -79,11 +84,12 @@ class Scrapper:
 
     def collect_table_data(self, page_no, table_region):
         row: list = []
+
         row_wise_data_collection = Query(self.pdf_raw_data).select(lambda x: x).where(
-            lambda x: x.pageNo == page_no and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
+            lambda x: x.pageNo == page_no
+            and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
         last_index_of_area = len(row_wise_data_collection) - 1
-
         for index in range(len(row_wise_data_collection)):
             if row_wise_data_collection[index].text == Scrapper.empty_string:
                 row = []
@@ -97,8 +103,8 @@ class Scrapper:
         pass
 
     def store_in_data_structure(self):
-        extracted: bool = True
         for row_index in range(len(self.data_storage)):
+
             column_len = len(self.column_list)
             item_list = []
             for column_index in range(column_len + 1):
@@ -108,48 +114,35 @@ class Scrapper:
                 # Last Iteration
                 # push to the list the remaining words
                 elif column_index == column_len:
-                    item = Item(row_index, column_index, [])
                     query_data = Query(self.data_storage[row_index]).select(lambda x: x).where(
                         lambda x: not x.extracted).to_list()
-
-                    for child_index in range(len(query_data)):
-                        child = query_data[child_index]
-                        child.extracted = extracted
-                        item.data.append(child.text)
-                        if child_index == 0:
-                            item.coordinate = ItemCoordinate(child.x1, child.y1, child.x2, child.y2)
-                    item_list.append(item)
                 # restrict words by coordinates
                 else:
-                    item = Item(row_index, column_index, [])
                     ref_header_x = self.column_list[column_index].coordinateList[0].x1
 
                     query_data = Query(self.data_storage[row_index]).select(lambda x: x).where(
                         lambda x: x.x2 < ref_header_x and not x.extracted).to_list()
 
-                    for child_index in range(len(query_data)):
-                        child = query_data[child_index]
-                        child.extracted = extracted
-                        item.data.append(child.text)
-                        if child_index == 0:
-                            item.coordinate = ItemCoordinate(child.x1, child.y1, child.x2, child.y2)
-                    item_list.append(item)
+                item_list.append(self.create_item(row_index, column_index, query_data))
+
             self.table_list.append(item_list)
+
+    def create_item(self, row_index, column_index, query_data):
+        item = Item(row_index, column_index, [])
+        for child_index, child in enumerate(query_data):
+            child.extracted = Scrapper.extracted
+            item.data.append(child.text)
+            if child_index == 0:
+                item.coordinate = ItemCoordinate(child.x1, child.y1, child.x2, child.y2)
+        return item
 
     def make_data_readable(self):
         for obj in self.table_list:
             for data in obj:
-                data.text = ""
-                for text in data.data:
-                    data.text += " " + text
+                data.text = " ".join(data.data)
 
     def remove_empty_text(self):
-        self.formatted_data.clear()
-        for obj in self.table_list:
-            for data in obj:
-                if data.text != Scrapper.empty_string:
-                    self.formatted_data.append(data)
-                    pass
+        self.formatted_data = [data for obj in self.table_list for data in obj if data.text != Scrapper.empty_string]
 
     def prepare_formatted_clean_data(self):
         self.remove_empty_text()
@@ -166,6 +159,7 @@ class Scrapper:
                 if len(query_data) == 0:
                     data = Query(self.formatted_data).where(
                         lambda x: x.row == ref_row and x.column == row.column).select(lambda x: x).first_or_none()
+
                     if data is not None:
                         data.text += row.text
                         row.deleted = True
@@ -176,9 +170,7 @@ class Scrapper:
             pass
         pass
 
-        for row in self.formatted_data:
-            if not row.deleted:
-                self.formatted_clean_data.append(row)
+        self.formatted_clean_data = [row for row in self.formatted_data if not row.deleted]
 
         pass
 
