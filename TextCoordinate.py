@@ -52,3 +52,10 @@ class GapCollection:
     def __init__(self, x, margin_left):
         self.x = x
         self.margin_left = margin_left
+
+
+class PdfProperties:
+    def __init__(self, pdf_path, mandatory_column, column_list):
+        self.pdf_path = pdf_path
+        self.mandatory_column = mandatory_column
+        self.column_list = column_list
