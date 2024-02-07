@@ -10,6 +10,7 @@ class PdfCollection:
     def add(self):
         self.collection = [
             PdfProperties(
+                1,
                 "Sample documents/New folder/123 Ink.pdf",
                 1,
                 [
@@ -22,6 +23,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                2,
                 "Sample documents/New folder/ACP Limited.pdf",
                 1,
                 [
@@ -34,6 +36,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                3,
                 "Sample documents/New folder/M. KELLIHER 1998 Ltd. 3 Page.pdf",
                 1,
                 [
@@ -49,6 +52,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                4,
                 "Sample documents/New folder/AccurA Diamond Tools Ltd.pdf",
                 1,
                 [
@@ -61,6 +65,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                5,
                 "Sample documents/New folder/Thomas Archer (Ballina) 2 Page.pdf",
                 1,
                 [
@@ -75,6 +80,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                6,
                 "Sample documents/New folder/Chadwicks 2 Page.pdf",
                 1,
                 [
@@ -89,6 +95,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                7,
                 "Sample documents/New folder/PF 3 Page.pdf",
                 1,
                 [
@@ -100,6 +107,7 @@ class PdfCollection:
                 ]
             ),
             PdfProperties(
+                8,
                 "Sample documents/New folder/Harlow Agencies Limited.pdf",
                 1,
                 [
@@ -111,6 +119,31 @@ class PdfCollection:
                     HeaderList(6, "Amount", [ItemCoordinate(2469, 1061, 2807, 1134)]),
                     HeaderList(7, "Dis %", [ItemCoordinate(2816, 1061, 3030, 1134)]),
                     HeaderList(8, "Line Total", [ItemCoordinate(3044, 1070, 3349.5, 1130)])
+                ]
+            ),
+            PdfProperties(
+                9,
+                "Sample documents/New folder/Aereco Ltd.pdf",
+                1,
+                [
+                    HeaderList(1, "Serial", [ItemCoordinate(99.84, 1494.44, 177.14, 1558.85)]),
+                    HeaderList(2, "Reference", [ItemCoordinate(180.36, 1491.22, 409.03, 1558.85)]),
+                    HeaderList(3, "Description", [ItemCoordinate(447, 1491.22, 1661.92, 1555.63)]),
+                    HeaderList(4, "Quantity", [ItemCoordinate(1671.58, 1494.44, 1929.24, 1555.63)]),
+                    HeaderList(5, "Unit Price", [ItemCoordinate(1942.12, 1494.44, 2193.35, 1555.63)]),
+                    HeaderList(6, "Total", [ItemCoordinate(2203, 1494.44, 2354.38, 1555.63)])
+                ]
+            ),
+            PdfProperties(
+                10,
+                "Sample documents/New folder/Alupress Ltd.pdf",
+                5,
+                [
+                    HeaderList(1, "Description", [ItemCoordinate(106.32, 1201.83, 1259.83, 1275.94)]),
+                    HeaderList(2, "Quantity", [ItemCoordinate(1272.72, 1208.27, 1543.37, 1275.94)]),
+                    HeaderList(3, "Unit Price", [ItemCoordinate(1569.15, 1205.05, 1865.58, 1275.94)]),
+                    HeaderList(4, "Tax", [ItemCoordinate(1907.47, 1198.61, 2062.12, 1275.94)]),
+                    HeaderList(5, "Amount EUR", [ItemCoordinate(2087.90, 1195.39, 2381.11, 1275.94)])
                 ]
             ),
         ]

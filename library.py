@@ -11,8 +11,7 @@ from TextCoordinate import TextCoordinate
 
 class Main:
 
-    def __init__(self, pdfPath):
-        self.pdfPath = pdfPath
+    def __init__(self):
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
         self.list: TextCoordinate = []
         pass

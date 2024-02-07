@@ -34,14 +34,14 @@ class Helper:
         return end_of_table
 
     def end_of_table_when_blank_under_table(self, page_no, end_of_page, mandatory_column_coord):
-        row_gap_allowed = 120
+        row_gap_allowed = 68
         end_of_table = 0
 
         data_source = (
             Query(self.pdf_raw_data)
             .where(
                 lambda x: x.pageNo == page_no
-                          and mandatory_column_coord.y2 < x.y1 < end_of_page
+                and mandatory_column_coord.y2 < x.y1 < end_of_page
             )
             .select(lambda x: x)
             .to_list()
