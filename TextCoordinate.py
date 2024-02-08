@@ -37,9 +37,10 @@ class Item:
 
 
 class HeaderCollection:
-    def __init__(self, pageNo):
-        self.pageNo = pageNo
+    def __init__(self, page_no):
+        self.pageNo = page_no
         self.coordinate = ItemCoordinate(0, 0, 0, 0)
+        self.headerItemAttribute = HeaderItemAttribute(0, 0)
 
 
 class TableRegion:
@@ -60,3 +61,9 @@ class PdfProperties:
         self.pdf_path = pdf_path
         self.mandatory_column = mandatory_column
         self.column_list = column_list
+
+
+class HeaderItemAttribute:
+    def __init__(self, height, padding_bottom):
+        self.height = height
+        self.padding_bottom = padding_bottom

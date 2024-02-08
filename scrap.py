@@ -2,7 +2,7 @@ import os
 
 from linq import Query
 
-from TextCoordinate import ItemCoordinate, Item, TableRegion,TextCoordinate
+from TextCoordinate import ItemCoordinate, Item, TableRegion, TextCoordinate, HeaderItemAttribute
 from convert_table_data_to_json import ConvertTableDataToJson
 from helper import Helper
 from library import Main
@@ -37,34 +37,54 @@ class Scrapper:
 
     def print_pdf_raw_data(self):
         for obj in self.pdf_raw_data:
-            self.helper.print_data(obj)
+            Helper.print_data(obj)
 
     def read_table_data(self):
         self.data_storage.clear()
-        adjustment_height = 45
 
-        # self.print_pdf_raw_data()
+        self.print_pdf_raw_data()
 
-        coord: ItemCoordinate = self.helper.table_header_area(self.column_list)
+        coord: ItemCoordinate = Helper.table_header_area(self.column_list)
         table_header_coordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)
         header_coordinate_list: [] = self.helper.repeating_table_headers(table_header_coordinate, self.column_list,
                                                                          self.mandatory_column)
 
-        table_header_width = table_header_coordinate.x2 - table_header_coordinate.x1
-        table_header_height = table_header_coordinate.y2 - table_header_coordinate.y1 - adjustment_height
+        print(table_header_coordinate.y1, " ", table_header_coordinate.y2)
 
         for index in range(len(header_coordinate_list)):
-            header_coordinate_list[index].coordinate.x2 = header_coordinate_list[
-                                                              index].coordinate.x1 + table_header_width
-            if index == 0:
-                header_coordinate_list[index].coordinate.y2 = header_coordinate_list[
-                                                                  index].coordinate.y1 + table_header_height
-                pass
-            else:
-                header_coordinate_list[index].coordinate.y2 = header_coordinate_list[index].coordinate.y1
-                pass
 
-            table_end_coordinate = ItemCoordinate(0, self.table_end(header_coordinate_list[index].pageNo), 0, 0)
+            header_found = header_coordinate_list[index].coordinate.y1 != header_coordinate_list[index].coordinate.y2
+            if header_found:
+                header_coordinate_list[index].coordinate.y2 = (header_coordinate_list[
+                                                                   index].coordinate.y1 +
+                                                               header_coordinate_list[
+                                                                   index].headerItemAttribute.height +
+                                                               header_coordinate_list[
+                                                                   index].headerItemAttribute.padding_bottom)
+
+            bottom1 = self.helper.table_bottom_by_page(header_coordinate_list[index].pageNo, self.column_list,
+                                                       ItemCoordinate(header_coordinate_list[index].coordinate.x1,
+                                                                      header_coordinate_list[index].coordinate.y1,
+                                                                      header_coordinate_list[index].coordinate.x2,
+                                                                      header_coordinate_list[index].coordinate.y2))
+
+            end_of_page = self.helper.end_of_page(header_coordinate_list[index].pageNo)
+            bottom2 = self.helper.end_of_table_when_blank_under_table(header_coordinate_list[index].pageNo,
+                                                                      end_of_page,
+                                                                      ItemCoordinate(
+                                                                          header_coordinate_list[
+                                                                              index].coordinate.x1,
+                                                                          header_coordinate_list[
+                                                                              index].coordinate.y1,
+                                                                          header_coordinate_list[
+                                                                              index].coordinate.x2,
+                                                                          header_coordinate_list[
+                                                                              index].coordinate.y2)) or end_of_page
+
+            bottom = min(bottom1, bottom2)
+
+            table_end_coordinate = ItemCoordinate(0, bottom, 0, 0)
+
             table_region: TableRegion = TableRegion(ItemCoordinate(header_coordinate_list[index].coordinate.x1,
                                                                    header_coordinate_list[index].coordinate.y1,
                                                                    header_coordinate_list[index].coordinate.x2,
@@ -79,16 +99,18 @@ class Scrapper:
         self.store_in_data_structure()
         self.make_data_readable()
         self.prepare_formatted_clean_data()
-        self.helper.print_separator()
-        self.helper.print_clean_data(self.formatted_clean_data)
+        Helper.print_separator()
+        Helper.print_clean_data(self.formatted_clean_data)
         pass
 
     def collect_table_data(self, page_no, table_region):
         row: list = []
 
+        print("+++", page_no, " ", table_region.top.y2, " ", table_region.bottom.y1)
+
         row_wise_data_collection = Query(self.pdf_raw_data).select(lambda x: x).where(
             lambda x: x.pageNo == page_no
-            and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
+                      and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
         last_index_of_area = len(row_wise_data_collection) - 1
         for index in range(len(row_wise_data_collection)):
@@ -176,9 +198,10 @@ class Scrapper:
         pass
 
     def table_end(self, page_no):
-        coordinate = self.helper.mandatory_column_coordinate(self.column_list, self.mandatory_column)
+        coordinate = Helper.mandatory_column_coordinate(self.column_list, self.mandatory_column)
         mandatory_column_coord = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
         end_of_page = self.helper.end_of_page(page_no)
+        print(" end_of_page ", end_of_page)
         return self.helper.end_of_table_coord(page_no, end_of_page,
                                               mandatory_column_coord)
         pass
