@@ -6,7 +6,7 @@ from TextCoordinate import ItemCoordinate, HeaderCollection, TextCoordinate, Hea
 
 class Helper:
     def __init__(self, pdf_raw_data):
-        self.word_frequency = 8
+        self.word_frequency = 3
         self.empty_string = ""
         self.first_page = 1
         self.pdf_raw_data = pdf_raw_data
@@ -41,7 +41,7 @@ class Helper:
             Query(self.pdf_raw_data)
             .where(
                 lambda x: x.pageNo == page_no
-                and mandatory_column_coord.y2 < x.y1 < end_of_page
+                          and mandatory_column_coord.y2 < x.y1 < end_of_page
             )
             .select(lambda x: x)
             .to_list()
@@ -73,7 +73,7 @@ class Helper:
     def end_of_page(self, page_no):
         bottom_of_page = Query(self.pdf_raw_data).where(
             lambda
-            x: x.pageNo == page_no).select(
+                x: x.pageNo == page_no).select(
             lambda x: x.y2).order(lambda x: x,
                                   descending=1).first_or_none()
         return bottom_of_page
@@ -291,8 +291,8 @@ class Helper:
             Query(self.pdf_raw_data)
             .where(
                 lambda x: x.pageNo == page_no
-                and coordinate.y1 < x.y1
-                and x.text != ''
+                          and coordinate.y1 < x.y1
+                          and x.text != ''
             )
             .select(lambda x: x)
             .order(lambda x: x.y1, descending=0)
@@ -311,15 +311,15 @@ class Helper:
             Query(self.pdf_raw_data)
             .where(
                 lambda x: x.pageNo == page_no
-                and y1 > x.y1
-                and x.text == ''
+                          and y1 > x.y1
+                          and x.text == ''
             )
             .select(lambda x: x)
             .order(lambda x: x.y1, descending=1)
             .first_or_none()
         )
 
-        return data_source.y1-5 if data_source.y1 is not None else 0
+        return data_source.y1 - 5 if data_source.y1 is not None else 0
 
     @staticmethod
     def check_item_inside_table(item, column_list):
@@ -382,6 +382,20 @@ class Helper:
         y2 = max(y2_list, default=None)
 
         return ItemCoordinate(x1, y1, x2, y2)
+
+    @staticmethod
+    def build_coordinate(coordinate):
+        return ItemCoordinate(coordinate.x1,
+                              coordinate.y1,
+                              coordinate.x2,
+                              coordinate.y2)
+
+    @staticmethod
+    def calculate_y2_from_y1(header):
+        y2 = (header.coordinate.y1 +
+              header.headerItemAttribute.height +
+              header.headerItemAttribute.padding_bottom)
+        return y2
 
     @staticmethod
     def print_separator():

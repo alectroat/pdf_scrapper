@@ -2,7 +2,7 @@ import os
 
 from linq import Query
 
-from TextCoordinate import ItemCoordinate, Item, TableRegion, TextCoordinate, HeaderItemAttribute
+from TextCoordinate import ItemCoordinate, Item, TableRegion
 from convert_table_data_to_json import ConvertTableDataToJson
 from helper import Helper
 from library import Main
@@ -42,59 +42,33 @@ class Scrapper:
     def read_table_data(self):
         self.data_storage.clear()
 
-        self.print_pdf_raw_data()
+        # self.print_pdf_raw_data()
 
-        coord: ItemCoordinate = Helper.table_header_area(self.column_list)
-        table_header_coordinate = ItemCoordinate(coord.x1, coord.y1, coord.x2, coord.y2)
-        header_coordinate_list: [] = self.helper.repeating_table_headers(table_header_coordinate, self.column_list,
-                                                                         self.mandatory_column)
+        table_header_coordinate = Helper.build_coordinate(Helper.table_header_area(self.column_list))
+        table_headers: [] = self.helper.repeating_table_headers(table_header_coordinate, self.column_list,
+                                                                self.mandatory_column)
 
         print(table_header_coordinate.y1, " ", table_header_coordinate.y2)
 
-        for index in range(len(header_coordinate_list)):
+        for index in range(len(table_headers)):
 
-            header_found = header_coordinate_list[index].coordinate.y1 != header_coordinate_list[index].coordinate.y2
+            header_found = table_headers[index].coordinate.y1 != table_headers[index].coordinate.y2
             if header_found:
-                header_coordinate_list[index].coordinate.y2 = (header_coordinate_list[
-                                                                   index].coordinate.y1 +
-                                                               header_coordinate_list[
-                                                                   index].headerItemAttribute.height +
-                                                               header_coordinate_list[
-                                                                   index].headerItemAttribute.padding_bottom)
+                table_headers[index].coordinate.y2 = Helper.calculate_y2_from_y1(table_headers[index])
 
-            bottom1 = self.helper.table_bottom_by_page(header_coordinate_list[index].pageNo, self.column_list,
-                                                       ItemCoordinate(header_coordinate_list[index].coordinate.x1,
-                                                                      header_coordinate_list[index].coordinate.y1,
-                                                                      header_coordinate_list[index].coordinate.x2,
-                                                                      header_coordinate_list[index].coordinate.y2))
+            table_header_coordinate = Helper.build_coordinate(table_headers[index].coordinate)
+            page_no = table_headers[index].pageNo
+            end_of_page = self.helper.end_of_page(page_no)
 
-            end_of_page = self.helper.end_of_page(header_coordinate_list[index].pageNo)
-            bottom2 = self.helper.end_of_table_when_blank_under_table(header_coordinate_list[index].pageNo,
+            bottom1 = self.helper.table_bottom_by_page(page_no, self.column_list, table_header_coordinate)
+            bottom2 = self.helper.end_of_table_when_blank_under_table(page_no,
                                                                       end_of_page,
-                                                                      ItemCoordinate(
-                                                                          header_coordinate_list[
-                                                                              index].coordinate.x1,
-                                                                          header_coordinate_list[
-                                                                              index].coordinate.y1,
-                                                                          header_coordinate_list[
-                                                                              index].coordinate.x2,
-                                                                          header_coordinate_list[
-                                                                              index].coordinate.y2)) or end_of_page
-
+                                                                      table_header_coordinate) or end_of_page
             bottom = min(bottom1, bottom2)
-
             table_end_coordinate = ItemCoordinate(0, bottom, 0, 0)
+            table_region: TableRegion = TableRegion(table_header_coordinate, table_end_coordinate)
 
-            table_region: TableRegion = TableRegion(ItemCoordinate(header_coordinate_list[index].coordinate.x1,
-                                                                   header_coordinate_list[index].coordinate.y1,
-                                                                   header_coordinate_list[index].coordinate.x2,
-                                                                   header_coordinate_list[index].coordinate.y2),
-                                                    ItemCoordinate(table_end_coordinate.x1,
-                                                                   table_end_coordinate.y1,
-                                                                   table_end_coordinate.x2,
-                                                                   table_end_coordinate.y2)
-                                                    )
-            self.collect_table_data(header_coordinate_list[index].pageNo, table_region)
+            self.collect_table_data(page_no, table_region)
 
         self.store_in_data_structure()
         self.make_data_readable()
@@ -110,7 +84,7 @@ class Scrapper:
 
         row_wise_data_collection = Query(self.pdf_raw_data).select(lambda x: x).where(
             lambda x: x.pageNo == page_no
-                      and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
+            and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
         last_index_of_area = len(row_wise_data_collection) - 1
         for index in range(len(row_wise_data_collection)):
@@ -126,31 +100,26 @@ class Scrapper:
         pass
 
     def store_in_data_structure(self):
-        for row_index in range(len(self.data_storage)):
+        for row_index, row_data in enumerate(self.data_storage):
 
-            column_len = len(self.column_list)
             item_list = []
-            for column_index in range(column_len + 1):
-                # First Iteration
-                if column_index == 0:
-                    continue
-                # Last Iteration
-                # push to the list the remaining words
-                elif column_index == column_len:
-                    query_data = Query(self.data_storage[row_index]).select(lambda x: x).where(
+            column_len = len(self.column_list)
+
+            for column_index in range(1, column_len + 1):
+                if column_index == column_len:
+                    query_data = Query(row_data).select(lambda x: x).where(
                         lambda x: not x.extracted).to_list()
-                # restrict words by coordinates
                 else:
                     ref_header_x = self.column_list[column_index].coordinateList[0].x1
-
-                    query_data = Query(self.data_storage[row_index]).select(lambda x: x).where(
+                    query_data = Query(row_data).select(lambda x: x).where(
                         lambda x: x.x2 < ref_header_x and not x.extracted).to_list()
 
                 item_list.append(self.create_item(row_index, column_index, query_data))
 
             self.table_list.append(item_list)
 
-    def create_item(self, row_index, column_index, query_data):
+    @staticmethod
+    def create_item(row_index, column_index, query_data):
         item = Item(row_index, column_index, [])
         for child_index, child in enumerate(query_data):
             child.extracted = Scrapper.extracted
@@ -174,24 +143,21 @@ class Scrapper:
         for row in self.formatted_data:
             if row.row == 0:
                 continue
-            else:
-                # check if mandatory column is missing
-                query_data = Query(self.formatted_data).where(
-                    lambda x: x.row == row.row and x.column == self.mandatory_column).select(lambda x: x).to_list()
 
-                if len(query_data) == 0:
-                    data = Query(self.formatted_data).where(
-                        lambda x: x.row == ref_row and x.column == row.column).select(lambda x: x).first_or_none()
+            # check if mandatory column is missing
+            query_data = Query(self.formatted_data).where(
+                lambda x: x.row == row.row and x.column == self.mandatory_column).select(lambda x: x).to_list()
 
-                    if data is not None:
-                        data.text += row.text
-                        row.deleted = True
-                    pass
-                else:
-                    ref_row = row.row
+            if len(query_data) == 0:
+                data = Query(self.formatted_data).where(
+                    lambda x: x.row == ref_row and x.column == row.column).select(lambda x: x).first_or_none()
+
+                if data is not None:
+                    data.text += row.text
+                    row.deleted = True
                 pass
-            pass
-        pass
+            else:
+                ref_row = row.row
 
         self.formatted_clean_data = [row for row in self.formatted_data if not row.deleted]
 

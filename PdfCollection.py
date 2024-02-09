@@ -260,6 +260,20 @@ class PdfCollection:
                     HeaderList(4, "VAT", [ItemCoordinate(2212.67, 1249.66, 2360.83, 1339.84)]),
                 ]
             ),
+            PdfProperties(
+                20,
+                "Sample documents/New folder/Credit_Note_5973_from_Nationwide_Energy_Consultants.pdf",
+                7,
+                [
+                    HeaderList(1, "DATE", [ItemCoordinate(135.77, 1341.23, 380.84, 1414.09)]),
+                    HeaderList(2, "ACTIVITY", [ItemCoordinate(390.72, 1344.54, 831.23, 1417.40)]),
+                    HeaderList(3, "DESCRIPTION", [ItemCoordinate(837.89, 1341.23, 1420.71, 1420.71)]),
+                    HeaderList(4, "QTY", [ItemCoordinate(1460.45, 1344.54, 1718.76, 1420.71)]),
+                    HeaderList(5, "TAX", [ItemCoordinate(1728.70, 1351.16, 1910.84, 1414.09)]),
+                    HeaderList(6, "RATE", [ItemCoordinate(1914.15, 1351.16, 2116.16, 1420.71)]),
+                    HeaderList(7, "AMOUNT", [ItemCoordinate(2149.28, 1344.54, 2457.27, 1417.40)])
+                ]
+            ),
         ]
         pass
 
