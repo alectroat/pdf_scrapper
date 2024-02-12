@@ -56,11 +56,13 @@ class GapCollection:
 
 
 class PdfProperties:
-    def __init__(self, index, pdf_path, mandatory_column, column_list):
+    def __init__(self, index, pdf_path, mandatory_column, column_list, word_frequency=4):
         self.id = index
         self.pdf_path = pdf_path
         self.mandatory_column = mandatory_column
         self.column_list = column_list
+        self.word_frequency = word_frequency
+        self.allowed_row_gap = 25
 
 
 class HeaderItemAttribute:

@@ -1,7 +1,5 @@
 import os
-
 from linq import Query
-
 from TextCoordinate import ItemCoordinate, Item, TableRegion
 from convert_table_data_to_json import ConvertTableDataToJson
 from helper import Helper
@@ -23,7 +21,10 @@ class Scrapper:
         self.column_list = self.pdf_property.column_list
 
         self.pdf_raw_data = Scrapper.library_object.ExtractDataFromPdf(self.pdf_path)
+
         self.helper = Helper(self.pdf_raw_data)
+        self.helper.allowed_row_gap = self.pdf_property.allowed_row_gap
+        self.helper.word_frequency = self.pdf_property.word_frequency
 
         self.table_list: list = []
         self.data_storage: list = []
@@ -48,7 +49,10 @@ class Scrapper:
         table_headers: [] = self.helper.repeating_table_headers(table_header_coordinate, self.column_list,
                                                                 self.mandatory_column)
 
-        print(table_header_coordinate.y1, " ", table_header_coordinate.y2)
+        self.helper.allowed_row_gap = self.helper.calculate_allowed_gap(table_header_coordinate)
+        print(" gap ", self.helper.allowed_row_gap)
+
+        # print(table_header_coordinate.y1, " ", table_header_coordinate.y2)
 
         for index in range(len(table_headers)):
 
@@ -60,11 +64,14 @@ class Scrapper:
             page_no = table_headers[index].pageNo
             end_of_page = self.helper.end_of_page(page_no)
 
-            bottom1 = self.helper.table_bottom_by_page(page_no, self.column_list, table_header_coordinate)
+            bottom1 = (self.helper.table_bottom_by_page(page_no, self.column_list, table_header_coordinate)
+                       or end_of_page)
             bottom2 = self.helper.end_of_table_when_blank_under_table(page_no,
                                                                       end_of_page,
                                                                       table_header_coordinate) or end_of_page
-            bottom = min(bottom1, bottom2)
+
+            print(" bottom1 ", bottom1, " bottom2 ", bottom2, " end ", end_of_page, " header-Y1 ", table_header_coordinate.y1)
+            bottom = max(bottom1, bottom2)
             table_end_coordinate = ItemCoordinate(0, bottom, 0, 0)
             table_region: TableRegion = TableRegion(table_header_coordinate, table_end_coordinate)
 
@@ -80,11 +87,11 @@ class Scrapper:
     def collect_table_data(self, page_no, table_region):
         row: list = []
 
-        print("+++", page_no, " ", table_region.top.y2, " ", table_region.bottom.y1)
+        print(" Y2 ", table_region.top.y2)
 
         row_wise_data_collection = Query(self.pdf_raw_data).select(lambda x: x).where(
             lambda x: x.pageNo == page_no
-            and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
+                      and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
         last_index_of_area = len(row_wise_data_collection) - 1
         for index in range(len(row_wise_data_collection)):
