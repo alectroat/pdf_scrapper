@@ -442,6 +442,7 @@ class Helper:
         for row in formatted_clean_data:
             if row.column == 1:
                 print("")
+            # print(row.column, " ", row.text)
             print(row.text)
 
     @staticmethod

@@ -156,7 +156,7 @@ class Scrapper:
                     lambda x: x.row == ref_row and x.column == row.column).select(lambda x: x).first_or_none()
 
                 if data is not None:
-                    data.text += row.text
+                    data.text += f" {row.text}"
                     row.deleted = True
                 pass
             else:
