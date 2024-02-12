@@ -1,12 +1,12 @@
 from linq import Query
 from operator import attrgetter
-
 from TextCoordinate import ItemCoordinate, HeaderCollection, TextCoordinate, HeaderItemAttribute
 
 
 class Helper:
     def __init__(self, pdf_raw_data):
-        self.word_frequency = 4
+        self.word_frequency = 0
+        self.row_gap = 0
         self.allowed_row_gap = 0
         self.empty_string = ""
         self.first_page = 1
@@ -51,7 +51,7 @@ class Helper:
         for index, item in enumerate(data_source):
             row_gap = data_source[index].y1 - data_source[index - 1].y2
 
-            if row_gap > self.allowed_row_gap:
+            if row_gap > self.row_gap:
                 end_of_table = data_source[index - 1].y2
                 break
 
@@ -62,8 +62,6 @@ class Helper:
                                                                  mandatory_column_coord) or end_of_page
         end_of_table_2 = self.end_of_table_when_blank_under_table(page_no, end_of_page,
                                                                   mandatory_column_coord) or end_of_page
-
-        print(" end_of_table_1 ", end_of_table_1, " end_of_table_2 ", end_of_table_2)
         end_of_table = min(end_of_table_1, end_of_table_2)
         return end_of_table
 
@@ -307,16 +305,11 @@ class Helper:
         item_ = None
 
         for index, item in enumerate(data_source):
-            # if item_ is not None:
-            #     print(" item.y1 ", item.y1, " item_.y2 ", item_.y2, " text 1  ", item.text, " text 2 ", item_.text,
-            #           self.allowed_row_gap)
             if not Helper.check_item_inside_table(item, column_list) or (
-                    item_ and (item.y1 - item_.y2) > self.allowed_row_gap):
+                    item_ and (item.y1 - item_.y2) > self.row_gap):
                 break
             else:
                 item_ = item
-
-        # print(" item_ ", item_.text, " y1 ", item_.y1)
 
         data_source = (
             Query(self.pdf_raw_data)
@@ -333,7 +326,7 @@ class Helper:
         return data_source.y2 if data_source is not None else 0
 
     def calculate_allowed_gap(self, header_coordinate):
-        maximum_allowed_row_gap = 150
+        # maximum_allowed_row_gap = 145
         first_row_first_word = (
             Query(self.pdf_raw_data)
             .where(
@@ -358,14 +351,10 @@ class Helper:
             .first_or_none()
         )
 
-        # print(" gap 7 ", header_coordinate.y2 - header_coordinate.y1)
-        # print(" gap ", first_row_first_word.text, " ", second_row_first_word.text)
-        # print(" gap ", first_row_first_word.y1, " ", second_row_first_word.y1)
-
         if first_row_first_word is None or second_row_first_word is None or (
-                second_row_first_word.y1 - first_row_first_word.y2) > maximum_allowed_row_gap:
+                second_row_first_word.y1 - first_row_first_word.y2) > self.allowed_row_gap:
             return 0
-        return (second_row_first_word.y1 - first_row_first_word.y2) * 1 + 50
+        return (second_row_first_word.y1 - first_row_first_word.y2) * 1 + 20
 
     @staticmethod
     def check_item_inside_table(item, column_list):

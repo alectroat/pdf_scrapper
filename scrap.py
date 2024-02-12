@@ -23,6 +23,7 @@ class Scrapper:
         self.pdf_raw_data = Scrapper.library_object.ExtractDataFromPdf(self.pdf_path)
 
         self.helper = Helper(self.pdf_raw_data)
+        self.helper.row_gap = self.pdf_property.row_gap
         self.helper.allowed_row_gap = self.pdf_property.allowed_row_gap
         self.helper.word_frequency = self.pdf_property.word_frequency
 
@@ -48,11 +49,7 @@ class Scrapper:
         table_header_coordinate = Helper.build_coordinate(Helper.table_header_area(self.column_list))
         table_headers: [] = self.helper.repeating_table_headers(table_header_coordinate, self.column_list,
                                                                 self.mandatory_column)
-
-        self.helper.allowed_row_gap = self.helper.calculate_allowed_gap(table_header_coordinate)
-        print(" gap ", self.helper.allowed_row_gap)
-
-        # print(table_header_coordinate.y1, " ", table_header_coordinate.y2)
+        self.helper.row_gap = self.helper.calculate_allowed_gap(table_header_coordinate)
 
         for index in range(len(table_headers)):
 
@@ -70,10 +67,11 @@ class Scrapper:
                                                                       end_of_page,
                                                                       table_header_coordinate) or end_of_page
 
-            print(" bottom1 ", bottom1, " bottom2 ", bottom2, " end ", end_of_page, " header-Y1 ", table_header_coordinate.y1)
             bottom = max(bottom1, bottom2)
             table_end_coordinate = ItemCoordinate(0, bottom, 0, 0)
             table_region: TableRegion = TableRegion(table_header_coordinate, table_end_coordinate)
+            # print(" bottom1 ", bottom1, " bottom2 ", bottom2, " end ", end_of_page, " Y1 ",
+            #       table_header_coordinate.y1, " Y2 ", bottom)
 
             self.collect_table_data(page_no, table_region)
 
@@ -86,8 +84,6 @@ class Scrapper:
 
     def collect_table_data(self, page_no, table_region):
         row: list = []
-
-        print(" Y2 ", table_region.top.y2)
 
         row_wise_data_collection = Query(self.pdf_raw_data).select(lambda x: x).where(
             lambda x: x.pageNo == page_no
@@ -174,7 +170,6 @@ class Scrapper:
         coordinate = Helper.mandatory_column_coordinate(self.column_list, self.mandatory_column)
         mandatory_column_coord = ItemCoordinate(coordinate.x1, coordinate.y1, coordinate.x2, coordinate.y2)
         end_of_page = self.helper.end_of_page(page_no)
-        print(" end_of_page ", end_of_page)
         return self.helper.end_of_table_coord(page_no, end_of_page,
                                               mandatory_column_coord)
         pass

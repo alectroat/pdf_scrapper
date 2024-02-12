@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class TextCoordinate:
     def __init__(self, text, pageNo, lineNo, x1, y1, x2, y2):
         self.text = text
@@ -56,16 +59,23 @@ class GapCollection:
 
 
 class PdfProperties:
-    def __init__(self, index, pdf_path, mandatory_column, column_list, word_frequency=4):
+    def __init__(self, index, pdf_path, mandatory_column, column_list, word_frequency=4, allowed_row_gap=35):
         self.id = index
         self.pdf_path = pdf_path
         self.mandatory_column = mandatory_column
         self.column_list = column_list
         self.word_frequency = word_frequency
-        self.allowed_row_gap = 25
+        self.row_gap = 45
+        self.allowed_row_gap = allowed_row_gap
 
 
 class HeaderItemAttribute:
     def __init__(self, height, padding_bottom):
         self.height = height
         self.padding_bottom = padding_bottom
+
+
+class RowGap(Enum):
+    Small = 35
+    Medium = 150
+    Large = 350

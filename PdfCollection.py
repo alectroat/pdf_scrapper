@@ -1,7 +1,9 @@
-from TextCoordinate import ItemCoordinate, HeaderList, PdfProperties
+from TextCoordinate import ItemCoordinate, HeaderList, PdfProperties, RowGap
 
 
 class PdfCollection:
+    word_frequency = 4
+
     def __init__(self):
         self.collection: PdfProperties = []
         self.add()
@@ -20,7 +22,9 @@ class PdfCollection:
                     HeaderList(4, "VAT", [ItemCoordinate(1659, 1063, 1843, 1105)]),
                     HeaderList(5, "UNIT PRICE", [ItemCoordinate(1846, 1066, 2091, 1111)]),
                     HeaderList(6, "TOTAL", [ItemCoordinate(2091, 1063, 2339, 1101)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 2,
@@ -33,7 +37,9 @@ class PdfCollection:
                     HeaderList(4, "Net Amt", [ItemCoordinate(1694, 1243, 1935, 1336)]),
                     HeaderList(5, "VAT %", [ItemCoordinate(1945, 1246, 2167, 1336)]),
                     HeaderList(6, "VAT", [ItemCoordinate(2177, 1249, 2360, 1339)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 3,
@@ -50,7 +56,8 @@ class PdfCollection:
                     HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
                     HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
                 ],
-                8
+                8,
+                RowGap.Small.value
             ),
             PdfProperties(
                 4,
@@ -63,7 +70,9 @@ class PdfCollection:
                     HeaderList(4, "Unit Price", [ItemCoordinate(1333, 1265, 1732, 1314)]),
                     HeaderList(5, "Net Amount", [ItemCoordinate(1742, 1268, 2064, 1314)]),
                     HeaderList(6, "VAT Amount", [ItemCoordinate(2087, 1259, 2373, 1317)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 5,
@@ -78,7 +87,9 @@ class PdfCollection:
                     HeaderList(6, "Amount", [ItemCoordinate(1713, 1194, 1955, 1304)]),
                     HeaderList(7, "Dis %", [ItemCoordinate(1955, 1198, 2106, 1310)]),
                     HeaderList(8, "Line Total", [ItemCoordinate(2109, 1198, 2383, 1310)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 6,
@@ -93,7 +104,9 @@ class PdfCollection:
                     HeaderList(6, "EXCL. VAT", [ItemCoordinate(1836, 1282, 2071, 1395)]),
                     HeaderList(7, "INCL.VAT", [ItemCoordinate(2075, 1282, 2300, 1398)]),
                     HeaderList(8, "CODE", [ItemCoordinate(2303, 1288, 2423, 1398)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 7,
@@ -105,7 +118,9 @@ class PdfCollection:
                     HeaderList(3, "Quantity", [ItemCoordinate(1732, 1062, 1974, 1156)]),
                     HeaderList(4, "Price", [ItemCoordinate(1977, 1059, 2174, 1162)]),
                     HeaderList(5, "Total", [ItemCoordinate(2177, 1066, 2367, 1156)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 8,
@@ -120,7 +135,9 @@ class PdfCollection:
                     HeaderList(6, "Amount", [ItemCoordinate(2469, 1061, 2807, 1134)]),
                     HeaderList(7, "Dis %", [ItemCoordinate(2816, 1061, 3030, 1134)]),
                     HeaderList(8, "Line Total", [ItemCoordinate(3044, 1070, 3349.5, 1130)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 9,
@@ -133,7 +150,9 @@ class PdfCollection:
                     HeaderList(4, "Quantity", [ItemCoordinate(1671.58, 1494.44, 1929.24, 1555.63)]),
                     HeaderList(5, "Unit Price", [ItemCoordinate(1942.12, 1494.44, 2193.35, 1555.63)]),
                     HeaderList(6, "Total", [ItemCoordinate(2203, 1494.44, 2354.38, 1555.63)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 10,
@@ -145,7 +164,9 @@ class PdfCollection:
                     HeaderList(3, "Unit Price", [ItemCoordinate(1569.15, 1205.05, 1865.58, 1275.94)]),
                     HeaderList(4, "Tax", [ItemCoordinate(1907.47, 1198.61, 2062.12, 1275.94)]),
                     HeaderList(5, "Amount EUR", [ItemCoordinate(2087.90, 1195.39, 2381.11, 1275.94)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 11,
@@ -158,7 +179,9 @@ class PdfCollection:
                     HeaderList(4, "PRICE", [ItemCoordinate(1658.70, 1072.51, 1987.22, 1149.81)]),
                     HeaderList(5, "VAT RATE", [ItemCoordinate(1987.22, 1078.96, 2090.28, 1153.03)]),
                     HeaderList(6, "VALUE", [ItemCoordinate(2099.94, 1078.96, 2370.49, 1146.59)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 12,
@@ -171,7 +194,9 @@ class PdfCollection:
                     HeaderList(4, "PRICE", [ItemCoordinate(1658.70, 1072.51, 1987.22, 1149.81)]),
                     HeaderList(5, "VAT RATE", [ItemCoordinate(1987.22, 1078.96, 2090.28, 1153.03)]),
                     HeaderList(6, "VALUE", [ItemCoordinate(2099.94, 1078.96, 2370.49, 1146.59)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 13,
@@ -184,7 +209,9 @@ class PdfCollection:
                     HeaderList(4, "Price", [ItemCoordinate(1623.27, 779.42, 1861.61, 840.62)]),
                     HeaderList(5, "VAT Rate", [ItemCoordinate(1855.22, 776.20, 2096.72, 840.62)]),
                     HeaderList(6, "Net Amount", [ItemCoordinate(2096.72, 782.64, 2383.37, 847.06)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 14,
@@ -198,7 +225,9 @@ class PdfCollection:
                     HeaderList(5, "Price", [ItemCoordinate(1343.06, 992, 1571.72, 1069.29)]),
                     HeaderList(6, "Discounted Price", [ItemCoordinate(1578.72, 992, 2054.85, 1069.29)]),
                     HeaderList(7, "Total", [ItemCoordinate(2141.72, 992, 2364.37, 1069.29)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 15,
@@ -209,7 +238,9 @@ class PdfCollection:
                     HeaderList(2, "Description", [ItemCoordinate(405.81, 1198.12, 1410.70, 1307.63)]),
                     HeaderList(3, "UNIT PRICE", [ItemCoordinate(1420.36, 1198.12, 1903.38, 1301.19)]),
                     HeaderList(4, "AMOUNT", [ItemCoordinate(1916.36, 1198.12, 2302.84, 1301.19)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 16,
@@ -220,7 +251,9 @@ class PdfCollection:
                     HeaderList(2, "RATE", [ItemCoordinate(1539.93, 1457.14, 2000.25, 1589.63)]),
                     HeaderList(3, "QTY", [ItemCoordinate(2010.19, 1460.45, 2189.02, 1596.23)]),
                     HeaderList(4, "AMOUNT", [ItemCoordinate(2192.33, 1453.83, 2437.10, 1589.61)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 17,
@@ -231,7 +264,9 @@ class PdfCollection:
                     HeaderList(2, "QTY", [ItemCoordinate(1269.49, 1727.03, 1594.92, 1785.03)]),
                     HeaderList(3, "UNIT PRICE", [ItemCoordinate(1601.37, 1733.45, 1994.46, 1785.03)]),
                     HeaderList(4, "TOTAL", [ItemCoordinate(1994.46, 1727.03, 2394.10, 1788.25)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 18,
@@ -244,7 +279,9 @@ class PdfCollection:
                     HeaderList(4, "Net", [ItemCoordinate(1802.90, 1432.66, 1947.78, 1500.27)]),
                     HeaderList(4, "Tax %", [ItemCoordinate(1947.78, 1432.66, 2095.88, 1497.05)]),
                     HeaderList(4, "Total", [ItemCoordinate(2095.88, 1429.44, 2260.10, 1497.25)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 19,
@@ -259,7 +296,9 @@ class PdfCollection:
                     HeaderList(4, "Net Amt", [ItemCoordinate(1832.62, 1240.44, 2038.75, 1333.40)]),
                     HeaderList(4, "VAT %", [ItemCoordinate(2038.75, 1243.22, 2209.45, 1333.40)]),
                     HeaderList(4, "VAT", [ItemCoordinate(2212.67, 1249.66, 2360.83, 1339.84)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 20,
@@ -273,7 +312,9 @@ class PdfCollection:
                     HeaderList(5, "TAX", [ItemCoordinate(1728.70, 1351.16, 1910.84, 1414.09)]),
                     HeaderList(6, "RATE", [ItemCoordinate(1914.15, 1351.16, 2116.16, 1420.71)]),
                     HeaderList(7, "AMOUNT", [ItemCoordinate(2149.28, 1344.54, 2457.27, 1417.40)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 21,
@@ -285,7 +326,9 @@ class PdfCollection:
                     HeaderList(2, "RATE", [ItemCoordinate(1850, 952, 1940, 980)]),
                     HeaderList(3, "QTY", [ItemCoordinate(2059, 952, 2134, 983)]),
                     HeaderList(4, "AMOUNT", [ItemCoordinate(2257, 952, 2424, 981)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 22,
@@ -305,7 +348,9 @@ class PdfCollection:
                     HeaderList(8, "Total Inc VAT €",
                                [ItemCoordinate(2117, 1328, 2201, 1357), ItemCoordinate(2214, 1330, 2261, 1357),
                                 ItemCoordinate(2271, 1330, 2340, 1357), ItemCoordinate(2349, 1330, 2369, 1357)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 23,
@@ -326,7 +371,9 @@ class PdfCollection:
                                [ItemCoordinate(2088, 1303, 2195, 1343), ItemCoordinate(2086, 1352, 2252, 1378)]),
                     HeaderList(4, "VAT CODE",
                                [ItemCoordinate(2312, 1312, 2377, 1338), ItemCoordinate(2314, 1355, 2413, 1381)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 24,
@@ -341,7 +388,9 @@ class PdfCollection:
                         ItemCoordinate(1281.6233766233768, 1026.6233766233765, 2086.3636363636365, 1096.168831168831)]),
                     HeaderList(4, "Total", [
                         ItemCoordinate(2122.792207792208, 1023.3116883116884, 2295.0000000000005, 1106.1038961038962)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 25,
@@ -359,7 +408,9 @@ class PdfCollection:
                                                           1269.4987012987012)]),
                     HeaderList(7, "EUR Total", [
                         ItemCoordinate(1997.6883116883116, 1211.5012987012988, 2326.3402597402596, 1282.3870129870131)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 26,
@@ -371,7 +422,9 @@ class PdfCollection:
                     HeaderList(3, "Quantity", [ItemCoordinate(1774, 1093, 1910, 1132)]),
                     HeaderList(4, "Price", [ItemCoordinate(2027, 1097, 2100, 1121)]),
                     HeaderList(5, "Total", [ItemCoordinate(2206, 1096, 2286, 1121)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 27,
@@ -380,7 +433,9 @@ class PdfCollection:
                 [
                     HeaderList(1, "DESCRIPTION", [ItemCoordinate(265, 956, 517, 1004)]),
                     HeaderList(2, "AMOUNT", [ItemCoordinate(2041, 956, 2208, 1004)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 28,
@@ -393,7 +448,9 @@ class PdfCollection:
                     HeaderList(3, "UNIT PRICE",
                                [ItemCoordinate(1511, 1094, 1599, 1142), ItemCoordinate(1613, 1094, 1724, 1141)]),
                     HeaderList(4, "AMOUNT", [ItemCoordinate(2098, 1094, 2265, 1142)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 29,
@@ -412,7 +469,9 @@ class PdfCollection:
                                        1681.3558441558441)]),
                     HeaderList(5, "Total", [
                         ItemCoordinate(2065.851948051948, 1606.4116883116883, 2368.887012987013, 1674.838961038961)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 30,
@@ -431,7 +490,9 @@ class PdfCollection:
                         ItemCoordinate(1926.02, 1678.02, 2154.70, 1736)]),
                     HeaderList(6, "Total", [
                         ItemCoordinate(2174, 1674, 2367, 1732)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 31,
@@ -442,7 +503,9 @@ class PdfCollection:
                         ItemCoordinate(135.27272727272728, 1275.4285714285716, 260.8831168831169, 1343.0649350649353)]),
                     HeaderList(2, "Description", [
                         ItemCoordinate(309.1948051948052, 1240, 1442.909090909091, 1330.1818181818182)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 32,
@@ -460,7 +523,9 @@ class PdfCollection:
                                        1162.7012987012986)]),
                     HeaderList(5, "VALUE", [
                         ItemCoordinate(2096.727272727273, 1072.5194805194806, 2370.4935064935066, 1149.818181818182)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 33,
@@ -484,7 +549,9 @@ class PdfCollection:
                         ItemCoordinate(1919.5844155844156, 1317.2987012987014, 2087.064935064935, 1375.2727272727275)]),
                     HeaderList(8, "Total Inc VAT €", [
                         ItemCoordinate(2103.1688311688313, 1320.5194805194806, 2370.4935064935066, 1381.7142857142858)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ),
             PdfProperties(
                 34,
@@ -499,7 +566,9 @@ class PdfCollection:
                     HeaderList(6, "EXCL. VAT", [ItemCoordinate(1836, 1282, 2071, 1395)]),
                     HeaderList(7, "INCL.VAT", [ItemCoordinate(2075, 1282, 2300, 1398)]),
                     HeaderList(8, "CODE", [ItemCoordinate(2303, 1288, 2423, 1398)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 35,
                 "Sample documents/New folder/Davies Limited CN.pdf",
@@ -513,7 +582,9 @@ class PdfCollection:
                     HeaderList(6, "EXCL. VAT", [ItemCoordinate(1836, 1282, 2071, 1395)]),
                     HeaderList(7, "INCL.VAT", [ItemCoordinate(2075, 1282, 2300, 1398)]),
                     HeaderList(8, "CODE", [ItemCoordinate(2303, 1288, 2423, 1398)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 36,
                 "Sample documents/New folder/Davies Limited.pdf",
@@ -527,7 +598,9 @@ class PdfCollection:
                     HeaderList(6, "EXCL. VAT", [ItemCoordinate(1836, 1282, 2071, 1395)]),
                     HeaderList(7, "INCL.VAT", [ItemCoordinate(2075, 1282, 2300, 1398)]),
                     HeaderList(8, "CODE", [ItemCoordinate(2303, 1288, 2423, 1398)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 37,
                 "Sample documents/New folder/E&G Insulation.pdf",
@@ -538,7 +611,9 @@ class PdfCollection:
                                        1185.2467532467533)]),
                     HeaderList(2, "AMOUNT", [
                         ItemCoordinate(2016.2077922077924, 1066.077922077922, 2341.506493506494, 1185.2467532467533)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 38,
                 "Sample documents/New folder/Harlow Agencies Limited CN.pdf",
@@ -553,7 +628,9 @@ class PdfCollection:
                     HeaderList(6, "Amount", [ItemCoordinate(2469, 1061, 2807, 1134)]),
                     HeaderList(7, "Dis %", [ItemCoordinate(2816, 1061, 3030, 1134)]),
                     HeaderList(8, "Line Total", [ItemCoordinate(3044, 1070, 3349.5, 1130)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 39,
                 "Sample documents/New folder/Hevac Limited.pdf",
@@ -567,7 +644,9 @@ class PdfCollection:
                                                            1527.2649350649351)]),
                     HeaderList(4, "Total V", [
                         ItemCoordinate(2013.7987012987014, 1462.8233766233766, 2355.3389610389613, 1527.2649350649351)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 40,
                 "Sample documents/New folder/Hilti - Long Term Rentals (DD) CN.pdf",
@@ -585,7 +664,9 @@ class PdfCollection:
                         ItemCoordinate(1801.1415584415583, 1420.9363636363637, 2136.237662337662, 1578.818181818182)]),
                     HeaderList(6, "Total", [
                         ItemCoordinate(2139.45974025974, 1427.3805194805195, 2397.2259740259738, 1578.818181818182)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 41,
                 "Sample documents/New folder/Hilti - Long Term Rentals (DD).pdf",
@@ -603,7 +684,9 @@ class PdfCollection:
                         ItemCoordinate(1756.0324675324675, 1382.2714285714285, 1975.1337662337662, 1446.712987012987)]),
                     HeaderList(6, "Item Value", [
                         ItemCoordinate(2158.7922077922076, 1382.2714285714285, 2361.7831168831167, 1446.712987012987)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 42,
                 "Sample documents/New folder/IConstruction Products Ltd.pdf",
@@ -624,7 +707,9 @@ class PdfCollection:
                         ItemCoordinate(1974.3376623376626, 1252.883116883117, 2174.0259740259744, 1320.5194805194808)]),
                     HeaderList(7, "Vat", [
                         ItemCoordinate(2186.909090909091, 1249.6623376623377, 2322.1818181818185, 1320.5194805194806)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 43,
                 "Sample documents/New folder/Liam Cawley Hardware.pdf",
@@ -643,7 +728,9 @@ class PdfCollection:
                                [ItemCoordinate(1736, 1175.5844155844156, 2038.753246753247, 1249.6623376623377)]),
                     HeaderList(6, "Amount", [
                         ItemCoordinate(2054.857142857143, 1172.3636363636365, 2380.1558441558445, 1249.662337662338)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 44,
                 "Sample documents/New folder/McGrath Ind Waste Ltd_.pdf",
@@ -669,7 +756,9 @@ class PdfCollection:
                         ItemCoordinate(2098.1456953642382, 1088.0794701986754, 2291.125827814569, 1125.0331125827813)]),
                     HeaderList(10, "Total", [
                         ItemCoordinate(2287.0198675496686, 1083.9735099337747, 2414.304635761589, 1125.0331125827813)]),
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Small.value
             ), PdfProperties(
                 45,
                 "Sample documents/New folder/North Mayo Construction & Hire.pdf",
@@ -691,7 +780,9 @@ class PdfCollection:
                         ItemCoordinate(2032.4503311258277, 1223.5761589403971, 2209.006622516556, 1285.165562913907)]),
                     HeaderList(8, "Value", [
                         ItemCoordinate(2209.006622516556, 1223.5761589403971, 2360.9271523178804, 1289.2715231788077)])
-                ]
+                ],
+                PdfCollection.word_frequency,
+                RowGap.Large.value
             )
         ]
         pass
