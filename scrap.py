@@ -89,8 +89,22 @@ class Scrapper:
             lambda x: x.pageNo == page_no
                       and table_region.top.y2 < x.y1 <= table_region.bottom.y1).to_list()
 
+        # print("")
+        # selected_column_data = []
+        # for column in self.column_list:
+        #     data = Query(row_wise_data_collection).select(lambda x: x).where(
+        #         lambda x: x.pageNo == page_no
+        #         and x.x1 >= column.coordinateList[0].x1 and x.x2 <= column.coordinateList[0].x2).to_list()
+        #     for item in data:
+        #         selected_column_data.append(item)
+        #
+        # row_wise_data_collection = selected_column_data
+
         last_index_of_area = len(row_wise_data_collection) - 1
         for index in range(len(row_wise_data_collection)):
+            # if not self.helper.check_item_inside_columns(row_wise_data_collection[index], self.column_list):
+            #     continue
+
             if row_wise_data_collection[index].text == Scrapper.empty_string:
                 row = []
             else:

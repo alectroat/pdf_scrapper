@@ -47,8 +47,8 @@ class PdfCollection:
                 1,
                 [
                     HeaderList(1, "Item Number", [ItemCoordinate(109, 1554, 467, 1620)]),
-                    HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
-                    HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
+                    # HeaderList(2, "Config No.", [ItemCoordinate(477, 1557, 712, 1617)]),
+                    # HeaderList(3, "Description", [ItemCoordinate(712, 1561, 1289, 1620)]),
                     HeaderList(4, "Qty", [ItemCoordinate(1295, 1567, 1395, 1617)]),
                     HeaderList(5, "Net selling price", [ItemCoordinate(1398, 1464, 1597, 1617)]),
                     HeaderList(6, "Unit", [ItemCoordinate(1607, 1534, 1769, 1617)]),
@@ -56,7 +56,7 @@ class PdfCollection:
                     HeaderList(6, "WEEE", [ItemCoordinate(1952, 1554, 2131, 1617)]),
                     HeaderList(6, "Net Total", [ItemCoordinate(2134, 1557, 2326, 1614)]),
                 ],
-                8,
+                7,
                 RowGap.Small.value
             ),
             PdfProperties(

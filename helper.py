@@ -365,6 +365,14 @@ class Helper:
         return passed
 
     @staticmethod
+    def check_item_inside_columns(item, column_list):
+        passed = any(
+            item.x1 >= column.coordinateList[0].x1 and item.x2 <= column.coordinateList[0].x2
+            for column in column_list
+        )
+        return passed
+
+    @staticmethod
     def mandatory_column_coordinate(column_list, mandatory_column):
         coordinate = ItemCoordinate(0, 0, 0, 0)
 
